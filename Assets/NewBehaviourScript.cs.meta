@@ -1,10 +1,11 @@
 fileFormatVersion: 2
-guid: ff34a4f5bd0294b9f9aea2579dd100c0
-timeCreated: 1446906853
+guid: 1c93f094d4c9940cd8082a841b6a00ac
+timeCreated: 1447846071
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - aTexture: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
