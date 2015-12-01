@@ -7,6 +7,8 @@ public class NewBehaviourScript : MonoBehaviour {
 	public GameObject systemObj1;
 	public GameObject systemObj2;
 	public GameObject systemObj3;
+	public GameObject systemObj4;
+	public GameObject systemObj5;
 
 	private float updateDuration;
 	private int updateFrameCounter;
@@ -14,6 +16,8 @@ public class NewBehaviourScript : MonoBehaviour {
 
 	public Image box1;
 	public Image box2;
+	public Text text1;
+	public Text text2;
 
 	
 	public int[] pattern30 = new int[] {
@@ -45,6 +49,9 @@ public class NewBehaviourScript : MonoBehaviour {
 
 		box1 = systemObj1.GetComponent<Image>();
 		box2 = systemObj2.GetComponent<Image>();
+
+		text1 = systemObj4.GetComponent<Text> ();
+		text2 = systemObj5.GetComponent<Text> ();
 	
 		updateDuration = 0.0f;
 		updateFrameCounter = 0;
@@ -56,7 +63,8 @@ public class NewBehaviourScript : MonoBehaviour {
 	void Update () {
 
 		Debug.Log ("==============================");
-		
+
+
 		Debug.Log("Time.frameCount :" +  Time.frameCount);
 		
 		updateDuration += Time.deltaTime;
@@ -64,6 +72,11 @@ public class NewBehaviourScript : MonoBehaviour {
 		
 		++updateFrameCounter;
 		Debug.Log("updateFrameCounter :" +  updateFrameCounter);
+
+		if (updateFrameCounter % 60 == 0) {
+			text1.text = updateDuration.ToString ();
+			text2.text = updateFrameCounter.ToString ();
+		}
 
 		++flagMan;
 		if (flagMan == 60)
