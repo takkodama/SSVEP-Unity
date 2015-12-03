@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 public class BoxController : MonoBehaviour {
 
+	//Declare UDPReceiver
+	private UDPReceiver udprcv;
+	//private string portNum;
+
 	public GameObject systemObj1;
 	public GameObject systemObj2;
 	public GameObject systemObj3;
@@ -33,9 +37,9 @@ public class BoxController : MonoBehaviour {
 	private int updateFrameCounter12Hz;
 	private int updateFrameCounter15Hz;
 	private int updateFrameCounter20Hz;
-
-	private int flagMan;
 	
+	private int flagMan;
+
 	public int[] pattern30 = new int[] {
 		0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
 		0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
@@ -85,10 +89,21 @@ public class BoxController : MonoBehaviour {
 	void Start () {
 		Application.targetFrameRate = 60;
 
+		//Set UDPReceiver instance
+		udprcv = GetComponent<UDPReceiver> ();
+		//portNum = udprcv.portNum;
+
 		box1 = systemObj1.GetComponent<Image>();
 		box2 = systemObj2.GetComponent<Image>();
 		box3 = systemObj3.GetComponent<Image>();
 		box4 = systemObj4.GetComponent<Image>();
+
+		//Alpha (Firstly Off)
+		box1.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
+		box2.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
+		box3.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
+		box4.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
+		//Check On-Off
 
 		text1 = systemObj5.GetComponent<Text> ();
 		text2 = systemObj6.GetComponent<Text> ();
@@ -111,22 +126,17 @@ public class BoxController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//Debug.Log ("========= For Debug =========");
+	
+		//Call UDPReceiver 
+		//!Action! Not sure whether it should be set here
+		Debug.Log ("udprcv.portNum :" + udprcv.portNum);
 
-		//Alpha (Firstly Off)
-		box1.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
-		box2.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
-		box3.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
-		box4.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
-		//Check On-Off
-		//box2.enabled = false;
-
-		Debug.Log ("========= For Debug =========");
-		
 		updateDuration += Time.deltaTime;
-		Debug.Log("updateDuration :" +  updateDuration);
+		//Debug.Log("updateDuration :" +  updateDuration);
 		
 		++updateFrameCounter;
-		Debug.Log("updateFrameCounter :" +  updateFrameCounter);
+		//Debug.Log("updateFrameCounter :" +  updateFrameCounter);
 
 		if (updateFrameCounter % 60 == 0) {
 			text1.text = updateDuration.ToString ();
@@ -137,6 +147,7 @@ public class BoxController : MonoBehaviour {
 		if (flagMan == 60) {
 			flagMan = 0;
 
+			//Counter to assure flashing frequencies for each boxes on production
 			updateFrameCounter10Hz = 0;
 			updateFrameCounter12Hz = 0;
 			updateFrameCounter15Hz = 0;
@@ -148,14 +159,15 @@ public class BoxController : MonoBehaviour {
 		if (pattern10 [flagMan] == 1) {
 			if(pattern10 [flagMan-1] == 0)
 				++updateFrameCounter10Hz;
+
 			text10.text = updateFrameCounter10Hz.ToString ();
 
 			box1.color = new Color(1.00f, 1.00f, 1.00f, 1.00f);
-			Debug.Log ("pattern10[" + flagMan + "]: " + pattern10 [flagMan]);
+			//Debug.Log ("pattern10[" + flagMan + "]: " + pattern10 [flagMan]);
 		} else {
 
 			box1.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
-			Debug.Log ("pattern10[" + flagMan + "]: " + pattern10 [flagMan]);
+			//Debug.Log ("pattern10[" + flagMan + "]: " + pattern10 [flagMan]);
 		}
 
 		//12Hz
@@ -165,10 +177,10 @@ public class BoxController : MonoBehaviour {
 			text12.text = updateFrameCounter12Hz.ToString ();
 
 			box2.color = new Color(1.00f, 1.00f, 1.00f, 1.00f);
-			Debug.Log ("pattern12[" + flagMan + "]: " + pattern12 [flagMan]);
+			//Debug.Log ("pattern12[" + flagMan + "]: " + pattern12 [flagMan]);
 		} else {
 			box2.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
-			Debug.Log ("pattern12[" + flagMan + "]: " + pattern12 [flagMan]);
+			//Debug.Log ("pattern12[" + flagMan + "]: " + pattern12 [flagMan]);
 		}
 		
 		//15Hz
@@ -178,10 +190,10 @@ public class BoxController : MonoBehaviour {
 			text15.text = updateFrameCounter15Hz.ToString ();
 
 			box3.color = new Color(1.00f, 1.00f, 1.00f, 1.00f);
-			Debug.Log ("pattern15[" + flagMan + "]: " + pattern15 [flagMan]);
+			//Debug.Log ("pattern15[" + flagMan + "]: " + pattern15 [flagMan]);
 		} else {
 			box3.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
-			Debug.Log ("pattern15[" + flagMan + "]: " + pattern15 [flagMan]);
+			//Debug.Log ("pattern15[" + flagMan + "]: " + pattern15 [flagMan]);
 		}
 
 		//20Hz
@@ -191,10 +203,10 @@ public class BoxController : MonoBehaviour {
 			text20.text = updateFrameCounter20Hz.ToString ();
 
 			box4.color = new Color(1.00f, 1.00f, 1.00f, 1.00f);
-			Debug.Log ("pattern20[" + flagMan + "]: " + pattern20 [flagMan]);
+			//Debug.Log ("pattern20[" + flagMan + "]: " + pattern20 [flagMan]);
 		} else {
 			box4.color = new Color(1.00f, 1.00f, 1.00f, 0.00f);
-			Debug.Log ("pattern20[" + flagMan + "]: " + pattern20 [flagMan]);
+			//Debug.Log ("pattern20[" + flagMan + "]: " + pattern20 [flagMan]);
 		}
 	
 	}
