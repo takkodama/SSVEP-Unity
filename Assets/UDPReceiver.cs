@@ -7,29 +7,32 @@ using System.Threading;
 
 public class UDPReceiver : MonoBehaviour
 {
-	int PORT_22222 = 22222;
-	int PORT_22223 = 22223;
-	int PORT_22224 = 22224;
-	UdpClient udp22222;
-	UdpClient udp22223;
-	UdpClient udp22224;
-
-	public string portNum;
+	private int PORT_NO;
+	private string receivedSignal;
+	private UdpClient udp;
 
 	Thread thread;
 	
 	void Start ()
 	{
-		portNum = "NullPo";
-		udp22222 = new UdpClient(PORT_22222);
-
+		receivedSignal = "NullPo";
+		udp = new UdpClient(PORT_NO);
+		Debug.Log ("In: UDPReceiver " + PORT_NO + " is set");
 		//If timeout should be set
-		//udp22222.Client.ReceiveTimeout = 10000;
+		//udp.Client.ReceiveTimeout = 10000;
 
 		thread = new Thread(new ThreadStart(ThreadMethod));
 		thread.Start(); 
 	}
-	
+
+	public void PORT_SET (int received_PORT_NO) {
+		PORT_NO = received_PORT_NO;
+	}
+
+	public string PORT_GET () {
+		return receivedSignal;
+	}
+
 	void Update ()
 	{
 	}
@@ -44,14 +47,12 @@ public class UDPReceiver : MonoBehaviour
 	{
 		while(true)
 		{
-			Debug.Log ("In: ThreadMethod() => Received any UDPs!");
+			Debug.Log ("In: " + PORT_NO + " => Received any UDPs!");
 			IPEndPoint remoteEP = null;
 
-			byte[] data = udp22222.Receive(ref remoteEP);
-			portNum = Encoding.ASCII.GetString(data);
+			byte[] data = udp.Receive(ref remoteEP);
+			receivedSignal = Encoding.ASCII.GetString(data);
 
 		}
 	} 
-
-
 }

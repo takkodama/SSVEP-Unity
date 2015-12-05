@@ -5,7 +5,10 @@ using UnityEngine.UI;
 public class BoxController : MonoBehaviour {
 
 	//Declare UDPReceiver
-	private UDPReceiver udprcv;
+	private UDPReceiver udprcv22222;
+	private UDPReceiver udprcv22223;
+	public Text text22223;
+
 	//private string portNum;
 
 	public GameObject systemObj1;
@@ -18,6 +21,7 @@ public class BoxController : MonoBehaviour {
 	public GameObject systemObj8;
 	public GameObject systemObj9;
 	public GameObject systemObj10;
+	public GameObject systemObj11;
 
 	public Image box1;
 	public Image box2;
@@ -90,8 +94,12 @@ public class BoxController : MonoBehaviour {
 		Application.targetFrameRate = 60;
 
 		//Set UDPReceiver instance
-		udprcv = GetComponent<UDPReceiver> ();
-		//portNum = udprcv.portNum;
+		udprcv22222 = GetComponent<UDPReceiver> ();
+		udprcv22223 = GetComponent<UDPReceiver> ();
+
+		//Port number set
+		udprcv22222.PORT_SET (22222);
+		udprcv22223.PORT_SET (22223);
 
 		box1 = systemObj1.GetComponent<Image>();
 		box2 = systemObj2.GetComponent<Image>();
@@ -112,6 +120,8 @@ public class BoxController : MonoBehaviour {
 		text12 = systemObj8.GetComponent<Text> ();
 		text15 = systemObj9.GetComponent<Text> ();
 		text20 = systemObj10.GetComponent<Text> ();
+
+		text22223 = systemObj11.GetComponent<Text> ();
 	
 		updateDuration = 0.0f;
 		updateFrameCounter = 0;
@@ -130,7 +140,11 @@ public class BoxController : MonoBehaviour {
 	
 		//Call UDPReceiver 
 		//!Action! Not sure whether it should be set here
-		Debug.Log ("udprcv.portNum :" + udprcv.portNum);
+		Debug.Log ("udprcv(22222):" + udprcv22222.PORT_GET ());
+		Debug.Log ("udprcv(22223):" + udprcv22223.PORT_GET ());
+
+		//Show their UDP signals
+		text22223.text = udprcv22223.PORT_GET ();
 
 		updateDuration += Time.deltaTime;
 		//Debug.Log("updateDuration :" +  updateDuration);
