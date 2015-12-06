@@ -5,9 +5,11 @@ using UnityEngine.UI;
 public class BoxController : MonoBehaviour {
 
 	//Declare UDPReceiver
-	private UDPReceiver udprcv22222;
-	private UDPReceiver udprcv22223;
-	public Text text22223;
+	private UDPReceiver udprcv;
+	public Text text_PORT1;
+	public Text text_PORT2;
+	public Text text_PORT3;
+	public Text text_PORT4;
 
 	//private string portNum;
 
@@ -21,7 +23,12 @@ public class BoxController : MonoBehaviour {
 	public GameObject systemObj8;
 	public GameObject systemObj9;
 	public GameObject systemObj10;
+
+	//Texts for port1~4
 	public GameObject systemObj11;
+	public GameObject systemObj12;
+	public GameObject systemObj13;
+	public GameObject systemObj14;
 
 	public Image box1;
 	public Image box2;
@@ -94,12 +101,11 @@ public class BoxController : MonoBehaviour {
 		Application.targetFrameRate = 60;
 
 		//Set UDPReceiver instance
-		udprcv22222 = GetComponent<UDPReceiver> ();
-		udprcv22223 = GetComponent<UDPReceiver> ();
+		udprcv = GetComponent<UDPReceiver> ();
 
 		//Port number set
-		udprcv22222.PORT_SET (22222);
-		udprcv22223.PORT_SET (22223);
+		//Later set == that value will be set finally
+		udprcv.PORT_SET (22222, 22223, 22224, 22225);
 
 		box1 = systemObj1.GetComponent<Image>();
 		box2 = systemObj2.GetComponent<Image>();
@@ -121,7 +127,10 @@ public class BoxController : MonoBehaviour {
 		text15 = systemObj9.GetComponent<Text> ();
 		text20 = systemObj10.GetComponent<Text> ();
 
-		text22223 = systemObj11.GetComponent<Text> ();
+		text_PORT1 = systemObj11.GetComponent<Text> ();
+		text_PORT2 = systemObj12.GetComponent<Text> ();
+		text_PORT3 = systemObj13.GetComponent<Text> ();
+		text_PORT4 = systemObj14.GetComponent<Text> ();
 	
 		updateDuration = 0.0f;
 		updateFrameCounter = 0;
@@ -140,11 +149,16 @@ public class BoxController : MonoBehaviour {
 	
 		//Call UDPReceiver 
 		//!Action! Not sure whether it should be set here
-		Debug.Log ("udprcv(22222):" + udprcv22222.PORT_GET ());
-		Debug.Log ("udprcv(22223):" + udprcv22223.PORT_GET ());
+		Debug.Log ("udprcv(22222):" + udprcv.PORT_GET_1 ());
+		Debug.Log ("udprcv(22223):" + udprcv.PORT_GET_2 ());
+		Debug.Log ("udprcv(22224):" + udprcv.PORT_GET_3 ());
+		Debug.Log ("udprcv(22225):" + udprcv.PORT_GET_4 ());
 
 		//Show their UDP signals
-		text22223.text = udprcv22223.PORT_GET ();
+		text_PORT1.text = udprcv.PORT_GET_1 ();
+		text_PORT2.text = udprcv.PORT_GET_2 ();
+		text_PORT3.text = udprcv.PORT_GET_3 ();
+		text_PORT4.text = udprcv.PORT_GET_4 ();
 
 		updateDuration += Time.deltaTime;
 		//Debug.Log("updateDuration :" +  updateDuration);

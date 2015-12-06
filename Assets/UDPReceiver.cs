@@ -7,30 +7,74 @@ using System.Threading;
 
 public class UDPReceiver : MonoBehaviour
 {
-	private int PORT_NO;
-	private string receivedSignal;
-	private UdpClient udp;
+	private int PORT_NO_1;
+	private int PORT_NO_2;
+	private int PORT_NO_3;
+	private int PORT_NO_4;
+	private string receivedSignal1;
+	private string receivedSignal2;
+	private string receivedSignal3;
+	private string receivedSignal4;
+	private UdpClient udp1;
+	private UdpClient udp2;
+	private UdpClient udp3;
+	private UdpClient udp4;
 
-	Thread thread;
+	Thread thread1;
+	Thread thread2;
+	Thread thread3;
+	Thread thread4;
 	
 	void Start ()
 	{
-		receivedSignal = "NullPo";
-		udp = new UdpClient(PORT_NO);
-		Debug.Log ("In: UDPReceiver " + PORT_NO + " is set");
+		receivedSignal1 = "NullPo";
+		receivedSignal2 = "NullPo";
+		receivedSignal3 = "NullPo";
+		receivedSignal4 = "NullPo";
+		udp1 = new UdpClient (PORT_NO_1);
+		udp2 = new UdpClient (PORT_NO_2);
+		udp3 = new UdpClient (PORT_NO_3);
+		udp4 = new UdpClient (PORT_NO_4);
+		Debug.Log ("In: UDPReceiver " + PORT_NO_1 + " is set");
+		Debug.Log ("In: UDPReceiver " + PORT_NO_2 + " is set");
+		Debug.Log ("In: UDPReceiver " + PORT_NO_3 + " is set");
+		Debug.Log ("In: UDPReceiver " + PORT_NO_4 + " is set");
+
 		//If timeout should be set
 		//udp.Client.ReceiveTimeout = 10000;
-
-		thread = new Thread(new ThreadStart(ThreadMethod));
-		thread.Start(); 
+		thread1 = new Thread(new ThreadStart(ThreadMethod1));
+		thread2 = new Thread(new ThreadStart(ThreadMethod2));
+		thread3 = new Thread(new ThreadStart(ThreadMethod3));
+		thread4 = new Thread(new ThreadStart(ThreadMethod4));
+		//1
+		//thread.IsBackground = true;
+		thread1.Start(); 
+		thread2.Start(); 
+		thread3.Start(); 
+		thread4.Start(); 
 	}
 
-	public void PORT_SET (int received_PORT_NO) {
-		PORT_NO = received_PORT_NO;
+	public void PORT_SET (int received_PORT_NO_1, int received_PORT_NO_2, int received_PORT_NO_3, int received_PORT_NO_4) {
+		PORT_NO_1 = received_PORT_NO_1;
+		PORT_NO_2 = received_PORT_NO_2;
+		PORT_NO_3 = received_PORT_NO_3;
+		PORT_NO_4 = received_PORT_NO_4;
 	}
 
-	public string PORT_GET () {
-		return receivedSignal;
+	public string PORT_GET_1 () {
+		return receivedSignal1;
+	}
+
+	public string PORT_GET_2 () {
+		return receivedSignal2;
+	}
+
+	public string PORT_GET_3 () {
+		return receivedSignal3;
+	}
+	
+	public string PORT_GET_4 () {
+		return receivedSignal4;
 	}
 
 	void Update ()
@@ -39,20 +83,59 @@ public class UDPReceiver : MonoBehaviour
 	
 	void OnApplicationQuit()
 	{
-		thread.Abort();
+		thread1.Abort();
+		thread2.Abort();
+		thread3.Abort();
+		thread4.Abort();
 	}
+	
 
-	//(memo)Below method moves when only the UDP signal receives
-	public void ThreadMethod()
+	//(memo)This method may keep opening 
+	public void ThreadMethod1()
 	{
 		while(true)
 		{
-			Debug.Log ("In: " + PORT_NO + " => Received any UDPs!");
-			IPEndPoint remoteEP = null;
+			IPEndPoint remoteEP1 = null;
+			
+			byte[] data1 = udp1.Receive(ref remoteEP1);
+			receivedSignal1 = Encoding.ASCII.GetString(data1);
+			Debug.Log ("ThreadMethod1() : " + receivedSignal1 + "=> Received!");
+		}
+	} 
 
-			byte[] data = udp.Receive(ref remoteEP);
-			receivedSignal = Encoding.ASCII.GetString(data);
+	public void ThreadMethod2()
+	{
+		while(true)
+		{
+			IPEndPoint remoteEP2 = null;
+			
+			byte[] data2 = udp2.Receive(ref remoteEP2);
+			receivedSignal2 = Encoding.ASCII.GetString(data2);
+			Debug.Log ("ThreadMethod2() : " + receivedSignal2 + "=> Received!");
+		}
+	} 
 
+	public void ThreadMethod3()
+	{
+		while(true)
+		{
+			IPEndPoint remoteEP3 = null;
+			
+			byte[] data3 = udp3.Receive(ref remoteEP3);
+			receivedSignal3 = Encoding.ASCII.GetString(data3);
+			Debug.Log ("ThreadMethod3() : " + receivedSignal3 + "=> Received!");
+		}
+	} 
+
+	public void ThreadMethod4()
+	{
+		while(true)
+		{
+			IPEndPoint remoteEP4 = null;
+			
+			byte[] data4 = udp4.Receive(ref remoteEP4);
+			receivedSignal4 = Encoding.ASCII.GetString(data4);
+			Debug.Log ("ThreadMethod4() : " + receivedSignal4 + "=> Received!");
 		}
 	} 
 }
