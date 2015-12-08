@@ -101,7 +101,7 @@ public class BoxController : MonoBehaviour {
 
 		//Set UDPReceiver instance & Port number set
 		udprcv = GetComponent<UDPReceiver> ();
-		udprcv.PORT_SET (22222, 22223, 22224, 22225);
+		udprcv.PORT_SET (20321, 20322, 20323, 20324);
 
 		//Set GetComponents (must be put here, or Start() function)
 		box1 = systemObj1.GetComponent<Image>(); 
@@ -137,10 +137,10 @@ public class BoxController : MonoBehaviour {
 		//Debug.Log ("========= For Debug =========");
 	
 		//(For Debug) Call UDPReceiver 
-		Debug.Log ("udprcv(22222):" + udprcv.PORT_GET_1 ());
-		Debug.Log ("udprcv(22223):" + udprcv.PORT_GET_2 ());
-		Debug.Log ("udprcv(22224):" + udprcv.PORT_GET_3 ());
-		Debug.Log ("udprcv(22225):" + udprcv.PORT_GET_4 ());
+		Debug.Log ("udprcv(20321):" + udprcv.PORT_GET_1 ());
+		Debug.Log ("udprcv(20322):" + udprcv.PORT_GET_2 ());
+		Debug.Log ("udprcv(20323):" + udprcv.PORT_GET_3 ());
+		Debug.Log ("udprcv(20324):" + udprcv.PORT_GET_4 ());
 
 		//(For Debug) Show their UDP signals
 		text_PORT1.text = udprcv.PORT_GET_1 ();
