@@ -142,7 +142,7 @@ public class BoxController : MonoBehaviour {
 		Debug.Log ("udprcv(22224):" + udprcv.PORT_GET_3 ());
 		Debug.Log ("udprcv(22225):" + udprcv.PORT_GET_4 ());
 
-		//Show their UDP signals
+		//(For Debug) Show their UDP signals
 		text_PORT1.text = udprcv.PORT_GET_1 ();
 		text_PORT2.text = udprcv.PORT_GET_2 ();
 		text_PORT3.text = udprcv.PORT_GET_3 ();
@@ -151,16 +151,24 @@ public class BoxController : MonoBehaviour {
 		//(For Debug) Frame Counter and Elapsed Time
 		updateDuration += Time.deltaTime;
 		++updateFrameCounter;
-
+			
 		if (updateFrameCounter % 60 == 0) {
 			text1.text = updateDuration.ToString ();
 			text2.text = updateFrameCounter.ToString ();
 		}
 
-		++flagMan;
+		//Switch
+		if (text_PORT1.text.Contains ("OVTK_StimulationId_ExperimentStart")) {
+			++flagMan;
+		} else {
+		//} else if (text_PORT1.text.Contains ("OVTK_StimulationId_ExperimentStop")) {
+			flagMan = 0;
+		}
+
 		if (flagMan == 60) 
 			flagMan = 0;
 
+		//Flash box
 		box_10hz.Box (flagMan);
 		box_12hz.Box (flagMan);
 		box_15hz.Box (flagMan);
