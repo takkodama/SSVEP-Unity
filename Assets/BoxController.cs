@@ -28,6 +28,7 @@ public class BoxController : MonoBehaviour {
 	public GameObject systemObj22;
 	public GameObject systemObj23;
 	public GameObject systemObj24;
+	//public GameObject systemObj25;
 
 	//Frame counter (NOT debug)
 	private int flagMan = 0;
@@ -49,10 +50,11 @@ public class BoxController : MonoBehaviour {
 	public Text text_Indicator2;
 	public Text text_Indicator3;
 	public Text text_Indicator4;
+	//public Text text_Indicator5;
 
 	//(For debug) Received PORT number
-	public GameObject systemObj11, systemObj12, systemObj13, systemObj14;
-	public Text text_PORT1, text_PORT2, text_PORT3, text_PORT4;
+	public GameObject systemObj11, systemObj12, systemObj13, systemObj14, systemObj15;
+	public Text text_PORT1, text_PORT2, text_PORT3, text_PORT4, text_PORT5;
 
 	//(For debug) Frame Counter and Elapsed Time
 	private float updateDuration = 0.0f;
@@ -111,7 +113,7 @@ public class BoxController : MonoBehaviour {
 
 		//Set UDPReceiver instance & Port number set
 		udprcv = GetComponent<UDPReceiver> ();
-		udprcv.PORT_SET (20321, 20322, 20323, 20324);
+		udprcv.PORT_SET (20321, 20322, 20323, 20324, 20326);
 
 		//Set GetComponents (must be put here, or Start() function)
 		box1 = systemObj1.GetComponent<Image>(); 
@@ -124,6 +126,7 @@ public class BoxController : MonoBehaviour {
 		text_Indicator2 = systemObj22.GetComponent<Text> ();
 		text_Indicator3 = systemObj23.GetComponent<Text> ();
 		text_Indicator4 = systemObj24.GetComponent<Text> ();
+		//text_Indicator5 = systemObj25.GetComponent<Text> ();
 
 		//(For debug)
 		text1 = systemObj5.GetComponent<Text> ();
@@ -136,6 +139,7 @@ public class BoxController : MonoBehaviour {
 		text_PORT2 = systemObj12.GetComponent<Text> ();
 		text_PORT3 = systemObj13.GetComponent<Text> ();
 		text_PORT4 = systemObj14.GetComponent<Text> ();
+		text_PORT5 = systemObj15.GetComponent<Text> ();
 
 		//Set BoxFlicker instance
 		box_10hz = systemObj1.AddComponent<BoxFlicker>(); 
@@ -158,42 +162,61 @@ public class BoxController : MonoBehaviour {
 		Debug.Log ("udprcv(20322):" + udprcv.PORT_GET_2 ());
 		Debug.Log ("udprcv(20323):" + udprcv.PORT_GET_3 ());
 		Debug.Log ("udprcv(20324):" + udprcv.PORT_GET_4 ());
+		Debug.Log ("udprcv(20326):" + udprcv.PORT_GET_5 ());
 
 		//Show their UDP signals
-		text_PORT1.text = udprcv.PORT_GET_1 ();
-		text_PORT2.text = udprcv.PORT_GET_2 ();
-		text_PORT3.text = udprcv.PORT_GET_3 ();
 		text_PORT4.text = udprcv.PORT_GET_4 ();
+		text_PORT5.text = udprcv.PORT_GET_5 ();
+
+		//=== Convert UDP acquired signals
+		int tmpInt_p1, tmpInt_p2, tmpInt_p3;
+		string tmpString_p1, tmpString_p2, tmpString_p3;
+
+		//Stimulus
+		tmpString_p1 = udprcv.PORT_GET_1 ();
+		tmpInt_p1 = System.Int32.Parse (tmpString_p1) - 33024;
+		text_PORT1.text = tmpInt_p1.ToString ();
+
+		//Target
+		tmpString_p2 = udprcv.PORT_GET_2 ();
+		tmpInt_p2 = System.Int32.Parse (tmpString_p2) - 33024;
+		text_PORT2.text = tmpInt_p2.ToString ();
+
+		//Result
+		tmpString_p3 = udprcv.PORT_GET_3 ();
+		tmpInt_p3 = System.Int32.Parse (tmpString_p3) - 33024;
+		text_PORT3.text = tmpInt_p3.ToString ();
+	
 
 		//Depict stimulus position on pic
 		// -- init
-		if (text_PORT4.text.Contains ("OVTK_StimulationId_TrialStop")) {
-			text_PORT2.text = "OVTK_StimulationId_Label_00";
-			text_PORT4.text = "OVTK_StimulationId_Label_00";
+		if (text_PORT4.text.Contains ("32774")) {
+			text_PORT2.text = "33024";
 		}
 
 		// -- depict1 ~ 4
-		if (text_PORT2.text.Contains ("OVTK_StimulationId_Label_00")) { 
+		if (text_PORT2.text.Contains ("33024")) { 
 			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-		} else if (text_PORT2.text.Contains ("OVTK_StimulationId_Label_01")) {
+			text_PORT3.text = "-";
+		} else if (text_PORT2.text.Contains ("33025")) {
 			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
 			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-		} else if (text_PORT2.text.Contains ("OVTK_StimulationId_Label_02")) {
+		} else if (text_PORT2.text.Contains ("33026")) {
 			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
 			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-		} else if (text_PORT2.text.Contains ("OVTK_StimulationId_Label_03")) {
+		} else if (text_PORT2.text.Contains ("33027")) {
 			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
 			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-		} else if (text_PORT2.text.Contains ("OVTK_StimulationId_Label_04")) {
+		} else if (text_PORT2.text.Contains ("33028")) {
 			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
 			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
@@ -210,7 +233,7 @@ public class BoxController : MonoBehaviour {
 		}
 
 		//Switch
-		if (text_PORT1.text.Contains ("OVTK_StimulationId_ExperimentStart")) {
+		if (text_PORT5.text.Contains ("32773")) {
 			++flagMan;
 		} else {
 		//} else if (text_PORT1.text.Contains ("OVTK_StimulationId_ExperimentStop")) {
