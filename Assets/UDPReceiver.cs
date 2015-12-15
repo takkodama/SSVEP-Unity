@@ -34,8 +34,8 @@ public class UDPReceiver : MonoBehaviour
 		receivedSignal1 = "33024"; //Stimulus - Label number
 		receivedSignal2 = "33024"; //Target - Label number
 		receivedSignal3 = "33024"; //Result - Label number
-		receivedSignal4 = "NullPo";
-		receivedSignal5 = "NullPo";
+		receivedSignal4 = "32770"; //Experiment start(32769) Default: stop(32770)
+		receivedSignal5 = "0"; //Trial start(32773) Default: stop(32774)
 		udp1 = new UdpClient (PORT_NO_1);
 		udp2 = new UdpClient (PORT_NO_2);
 		udp3 = new UdpClient (PORT_NO_3);
@@ -71,24 +71,24 @@ public class UDPReceiver : MonoBehaviour
 		PORT_NO_5 = received_PORT_NO_5;
 	}
 
-	public string PORT_GET_1 () {
-		return receivedSignal1;
+	public int PORT_GET_1 () {
+		return System.Int32.Parse (receivedSignal1);
 	}
 
-	public string PORT_GET_2 () {
-		return receivedSignal2;
+	public int PORT_GET_2 () {
+		return System.Int32.Parse (receivedSignal2);
 	}
 
-	public string PORT_GET_3 () {
-		return receivedSignal3;
+	public int PORT_GET_3 () {
+		return System.Int32.Parse (receivedSignal3);
 	}
 	
-	public string PORT_GET_4 () {
-		return receivedSignal4;
+	public int PORT_GET_4 () {
+		return System.Int32.Parse (receivedSignal4);
 	}
 
-	public string PORT_GET_5 () {
-		return receivedSignal5;
+	public int PORT_GET_5 () {
+		return System.Int32.Parse (receivedSignal5);
 	}
 
 	void Update ()
