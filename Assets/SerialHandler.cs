@@ -80,20 +80,26 @@ public class SerialHandler : MonoBehaviour {
 	{
 		try {
 			serialPort_.Write (message);
-			StartCoroutine (DelayMethod (0.1f, () =>
-			                             {
+			serialPort_.Write ("99");
+
+			/*
+			StartCoroutine (DelayMethod (20, () =>{
 				Debug.Log ("Delay call");
-				serialPort_.Write ("99");
+		
+				print("After" + Time.time);
 			}));
+			*/
+
 		} catch (System.Exception e) {
 			Debug.LogWarning (e.Message);
 		}
 	}
-	
-	private IEnumerator DelayMethod(float waitTime, Action action)
+
+	private IEnumerator DelayMethod(float waitTime)
 	{
+
 		yield return new WaitForSeconds(waitTime);
-		action();
+
 	}
 }
 
