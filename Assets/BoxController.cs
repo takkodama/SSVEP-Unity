@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
+
 public class BoxController : MonoBehaviour {
 
 	//Declare UDPReceiver
@@ -9,7 +10,8 @@ public class BoxController : MonoBehaviour {
 
 	//Declare SerialHandler
 	private SerialHandler serialHandler;
-	
+
+
 	//Boxes
 	public GameObject systemObj1;
 	public GameObject systemObj2;
@@ -67,6 +69,9 @@ public class BoxController : MonoBehaviour {
 	//(For debug) Frame Counter and Elapsed Time
 	private float updateDuration = 0.0f;
 	private int updateFrameCounter = 0;
+
+	//Stimulus Frame Counter (activate only 6 frame == 0.1 sec)
+	private int stimulusFrameCounter = 0;
 
 	//Flicker pattern arrays
 	public int[] pattern30 = new int[] {
@@ -166,9 +171,9 @@ public class BoxController : MonoBehaviour {
 
 	//For debug
 	public void portSetter (int p1, int p2, int p3, int p4, int p5){
-		tmpInt_p1 = p1;
-		tmpInt_p2 = p2;
-		tmpInt_p3 = p3;
+		tmpInt_p1 = p1 - 33024;
+		tmpInt_p2 = p2 - 33024;
+		tmpInt_p3 = p3 - 33024;
 		tmpInt_p4 = p4;
 		tmpInt_p5 = p5;
 	}
@@ -178,13 +183,11 @@ public class BoxController : MonoBehaviour {
 		//Debug.Log ("========= For Debug =========");
 
 		//GET UDP signals
-		/*
-		tmpInt_p1 = udprcv.PORT_GET_1 () - 33024; //Stimulus (PORT: 20321)
-		tmpInt_p2 = udprcv.PORT_GET_2 () - 33024; //Target (PORT: 20322)
-		tmpInt_p3 = udprcv.PORT_GET_3 () - 33024; //Result (PORT: 20323)
-		tmpInt_p4 = udprcv.PORT_GET_4 (); //Experiment start(32769) Default: stop(32770)  (PORT: 20324)
-		tmpInt_p5 = udprcv.PORT_GET_5 (); //Trial start(32773) stop(32774) (PORT: 20326) Default:0 
-		*/
+		//tmpInt_p1 = udprcv.PORT_GET_1 () - 33024; //Stimulus (PORT: 20321)
+		//tmpInt_p2 = udprcv.PORT_GET_2 () - 33024; //Target (PORT: 20322)
+		//tmpInt_p3 = udprcv.PORT_GET_3 () - 33024; //Result (PORT: 20323)
+		//tmpInt_p4 = udprcv.PORT_GET_4 (); //Experiment start(32769) Default: stop(32770)  (PORT: 20324)
+		//tmpInt_p5 = udprcv.PORT_GET_5 (); //Trial start(32773) stop(32774) (PORT: 20326) Default:0 
 
 		//Hold some parameters on behalf of frame valuable
 		//if (tmpInt_p2 != 33024)
@@ -233,7 +236,7 @@ public class BoxController : MonoBehaviour {
 			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
 			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
 			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-		}else if (tmpInt_p2 == 1) {
+		} else if (tmpInt_p2 == 1) {
 			text_PORT3.text = "-";
 			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
 			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
@@ -271,18 +274,38 @@ public class BoxController : MonoBehaviour {
 			text_PORT4.text = "Ex:START";
 		}
 
-		//Debug.Log (tmpInt_p1.ToString ());
-
 		//==============================
 
 		//(For Debug) Frame Counter and Elapsed Time
 		updateDuration += Time.deltaTime;
 		++updateFrameCounter;
 
-		//if new value has input to stimulus
+
+		/*
 		if (tmpInt_p1 != tmpInt_previous) {
 			serialHandler.Write (tmpInt_p1.ToString ());
 		}
+		*/
+
+		//if new value has input to stimulus
+		if (tmpInt_p1 != tmpInt_previous) {
+			//Debug.Log ("Before: " + Time.time);
+			stimulusFrameCounter = 1;
+			//serialHandler.Write (tmpInt_p1.ToString ());
+			serialHandler.CommandReceiver (tmpInt_p1);
+			Debug.Log ("tmpInt_p1.ToString (): " + tmpInt_p1.ToString ());
+		}
+
+		if (stimulusFrameCounter == 7) {
+			//Debug.Log ("==========After==========: " + Time.time);
+			stimulusFrameCounter = 0;
+			tmpInt_p1 = 0;
+			//Debug.Log ("=== stimulusFrameCounter ===: " + stimulusFrameCounter);
+		} else if (stimulusFrameCounter > 0) {
+			//Debug.Log ("=== stimulusFrameCounter ===: " + stimulusFrameCounter);
+			++stimulusFrameCounter;
+		}
+
 
 		if (updateFrameCounter % 60 == 0) {
 			text1.text = updateDuration.ToString ();
@@ -307,5 +330,8 @@ public class BoxController : MonoBehaviour {
 		//Finally
 		//To distingish whther tmpInt_p1 is same or not
 		tmpInt_previous = tmpInt_p1;
+		//Debug.Log ("tmpInt_previous: " + tmpInt_previous);
+		//Debug.Log ("tmpInt_p1: " + tmpInt_p1);
 	}
+	
 }

@@ -57,4 +57,10 @@ public class KeyController : MonoBehaviour {
 
 
 	}
+
+	public void Aho()
+	{
+		serialHandler.Write("0");
+	}
+
 }
