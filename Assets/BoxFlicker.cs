@@ -30,8 +30,7 @@ public class BoxFlicker : MonoBehaviour {
 
 		if (flagMan == 0)
 			updateFrameCounter = 0;
-		
-		//10Hz
+	
 		if (patternArray [flagMan] == 1) {
 			if (patternArray [flagMan - 1] == 0)
 				++updateFrameCounter;
@@ -65,7 +64,7 @@ public class BoxFlicker : MonoBehaviour {
 		box.transform.localScale = theScale;
 	}
 
-	public string GetCounter () {
+	public string getCounter () {
 		return updateFrameCounter.ToString ();
 	}
 

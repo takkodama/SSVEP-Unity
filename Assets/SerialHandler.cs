@@ -10,7 +10,7 @@ public class SerialHandler : MonoBehaviour {
 	public event SerialDataReceivedEventHandler OnDataReceived;
 	
 	//public string portName = "COM6";
-	public string portName = "/dev/cu.usbmodem1411";
+	public string portName = "COM4";
 	public int baudRate    = 9600;
 	
 	private static SerialPort serialPort_;
@@ -77,8 +77,9 @@ public class SerialHandler : MonoBehaviour {
 		}
 	}
 
-	public void CommandReceiver(int command)
+	public void setCommand(int command)
 	{
+
 		switch (command)
 		{
 		case 1:
@@ -99,14 +100,14 @@ public class SerialHandler : MonoBehaviour {
 		}
 	}
 	
-	public void Write(string message)
+	private void Write(string message)
 	{
 		try {
-			Debug.Log("=> Before" + Time.time);
+			//Debug.Log("=> Before" + Time.time);
 			serialPort_.Write (message);
 			StartCoroutine(DelayMethod(0.1f, () =>
 			                           {
-				Debug.Log("After =>" + Time.time);
+				//Debug.Log("After =>" + Time.time);
 				serialPort_.Write ("99");
 			}));
 		} catch (System.Exception e) {

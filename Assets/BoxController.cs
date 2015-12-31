@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class BoxController : MonoBehaviour {
 
-	//Declare UDPReceiver
+	//Declare Classes
 	private UDPReceiver udprcv;
-
-	//Declare SerialHandler
 	private SerialHandler serialHandler;
-
+	private IndicatorSetter indicatorSetter;
+	private PatternArray patternArray;
+	private StateMachine stateMachine;
 
 	//Boxes
 	public GameObject systemObj1;
@@ -41,7 +41,6 @@ public class BoxController : MonoBehaviour {
 
 	//GET UDP signals
 	private int tmpInt_p1, tmpInt_p2, tmpInt_p3, tmpInt_p4, tmpInt_p5, tmpInt_previous;
-	private int holdInt_p2, holdInt_p3;
 	
 	//(For debug) Each boxes counter
 	public GameObject systemObj5;
@@ -74,50 +73,7 @@ public class BoxController : MonoBehaviour {
 	private int stimulusFrameCounter = 0;
 
 	//Flicker pattern arrays
-	public int[] pattern30 = new int[] {
-		0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-		0, 1, 0, 1, 0, 1, 0, 1, 0, 1
-	};
-
-	public int[] pattern20 = new int[] {
-		0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-		0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-		1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-		0, 0, 1, 0, 0, 1, 0, 0, 1, 0,
-		0, 1, 0, 0, 1, 0, 0, 1, 0, 0,
-		1, 0, 0, 1, 0, 0, 1, 0, 0, 1,
-	};
-
-	public int[] pattern15 = new int[] {
-		0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-		1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-		0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-		1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-		0, 0, 1, 1, 0, 0, 1, 1, 0, 0,
-		1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-	};
-
-	public int[] pattern12 = new int[] {
-		0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
-		0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
-		0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
-		0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
-		0, 0, 0, 1, 1, 0, 0, 0, 1, 1,
-		0, 0, 0, 1, 1, 0, 0, 0, 1, 1
-	};
-
-	public int[] pattern10 = new int[] {
-		0, 0, 0, 1, 1, 1, 0, 0, 0, 1,
-		1, 1, 0, 0, 0, 1, 1, 1, 0, 0,
-		0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
-		0, 0, 0, 1, 1, 1, 0, 0, 0, 1,
-		1, 1, 0, 0, 0, 1, 1, 1, 0, 0,
-		0, 1, 1, 1, 0, 0, 0, 1, 1, 1
-	};
+	private int[] pat10, pat12, pat15, pat20, pat30;
 
 	// Use this for initialization
 	void Start () {
@@ -130,6 +86,12 @@ public class BoxController : MonoBehaviour {
 
 		//Set serialHandler
 		serialHandler = GetComponent<SerialHandler> ();
+
+		//Set indicatorSetter
+		indicatorSetter = GetComponent<IndicatorSetter> ();
+
+		//Set indicatorSetter
+		stateMachine = GetComponent<StateMachine> ();
 
 		//Set GetComponents (must be put here, or Start() function)
 		box1 = systemObj1.GetComponent<Image>(); 
@@ -163,10 +125,18 @@ public class BoxController : MonoBehaviour {
 		box_15hz = systemObj3.AddComponent<BoxFlicker>(); 
 		box_20hz = systemObj4.AddComponent<BoxFlicker>(); 
 
-		box_10hz.Setting (pattern10, box1);
-		box_12hz.Setting (pattern12, box2);
-		box_15hz.Setting (pattern15, box3);
-		box_20hz.Setting (pattern20, box4);
+		//Set patternArray
+		patternArray = GetComponent<PatternArray> ();
+		pat10 = patternArray.getPat10();
+		pat12 = patternArray.getPat12();
+		pat15 = patternArray.getPat15();
+		pat20 = patternArray.getPat20();
+		pat30 = patternArray.getPat30();
+
+		box_10hz.Setting (pat10, box1);
+		box_12hz.Setting (pat12, box2);
+		box_15hz.Setting (pat15, box3);
+		box_20hz.Setting (pat20, box4);
 	}
 
 	//For debug
@@ -189,10 +159,6 @@ public class BoxController : MonoBehaviour {
 		//tmpInt_p4 = udprcv.PORT_GET_4 (); //Experiment start(32769) Default: stop(32770)  (PORT: 20324)
 		//tmpInt_p5 = udprcv.PORT_GET_5 (); //Trial start(32773) stop(32774) (PORT: 20326) Default:0 
 
-		//Hold some parameters on behalf of frame valuable
-		//if (tmpInt_p2 != 33024)
-		//	holdInt_p2 = tmpInt_p2;
-
 		//Put them screen texts
 		text_PORT1.text = tmpInt_p1.ToString (); //will not need (For debug)
 		text_PORT2.text = tmpInt_p2.ToString (); //Target
@@ -207,9 +173,23 @@ public class BoxController : MonoBehaviour {
 		//Debug.Log ("PORT4_udprcv(20324):" + tmpInt_p4);
 		//Debug.Log ("PORT5_udprcv(20326):" + tmpInt_p5);
 
+		//Experiment start(32769) Default: stop(32770)
+		//Reset Target and Result texts and picture circle
+		/*
+		if (tmpInt_p4 == 32770) {
+			TrialFlag = 0;
+			RestFlag = 0;
+			text_PORT4.text = "Ex:STOP";
+		} else if (tmpInt_p4 == 32769) {
+			text_PORT4.text = "Ex:START";
+		}
+		*/
+		//text_PORT4.text = stateMachine.ExperimentStatement (tmpInt_p4);
+
 		//Trial start(32773) Default: stop(32774)
 		//Switch TrialFlag
 		//Reset Target and Result texts and picture circle
+		/*
 		if (tmpInt_p5 == 32774 || tmpInt_p5 == 32780) { //32780 == OVTK_StimulationId_VisualStimulationStop
 			TrialFlag = 0;
 			RestFlag++;
@@ -219,60 +199,28 @@ public class BoxController : MonoBehaviour {
 			RestFlag = 0;
 			text_PORT5.text = "Tr:START";
 		}
+		*/
+		//text_PORT5.text = stateMachine.TrialStatement (tmpInt_p5);
+
+		text_PORT4.text = stateMachine.Statement (tmpInt_p4, tmpInt_p5);
 
 		//Yellow depict OFF (Only 180 frames)
-		if (RestFlag > 1 && RestFlag < 180) {
+		if (stateMachine.getRestFlag() > 1 && stateMachine.getRestFlag() < 180) {
 			tmpInt_p2 = 0;
-			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
+			/*
+			text_Indicator1.color = indicatorSetter.Indicator1(0);
+			text_Indicator2.color = indicatorSetter.Indicator2(0);
+			text_Indicator3.color = indicatorSetter.Indicator3(0);
+			text_Indicator4.color = indicatorSetter.Indicator4(0);
+			*/
 		}
 
 		//Depict TARGET and stimulus position on pic
 		// -- depict1 ~ 4
-		if (tmpInt_p2 == 0) {
-			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-		} else if (tmpInt_p2 == 1) {
-			text_PORT3.text = "-";
-			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-		} else if (tmpInt_p2 == 2) {
-			text_PORT3.text = "-";
-			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-		} else if (tmpInt_p2 == 3) {
-			text_PORT3.text = "-";
-			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-		} else if (tmpInt_p2 == 4) {
-			text_PORT3.text = "-";
-			text_Indicator1.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator2.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator3.color = new Color (1.00f, 1.00f, 0.00f, 0.00f);
-			text_Indicator4.color = new Color (1.00f, 1.00f, 0.00f, 1.00f);
-		}
-
-		//Experiment start(32769) Default: stop(32770)
-		//Reset Target and Result texts and picture circle
-		if (tmpInt_p4 == 32770) {
-			TrialFlag = 0;
-			RestFlag = 0;
-			text_PORT2.text = "-";
-			text_PORT3.text = "-";
-			text_PORT4.text = "Ex:STOP";
-		} else if (tmpInt_p4 == 32769) {
-			text_PORT4.text = "Ex:START";
-		}
+		text_Indicator1.color = indicatorSetter.Indicator1(tmpInt_p2);
+		text_Indicator2.color = indicatorSetter.Indicator2(tmpInt_p2);
+		text_Indicator3.color = indicatorSetter.Indicator3(tmpInt_p2);
+		text_Indicator4.color = indicatorSetter.Indicator4(tmpInt_p2);
 
 		//==============================
 
@@ -280,52 +228,45 @@ public class BoxController : MonoBehaviour {
 		updateDuration += Time.deltaTime;
 		++updateFrameCounter;
 
-
-		/*
-		if (tmpInt_p1 != tmpInt_previous) {
-			serialHandler.Write (tmpInt_p1.ToString ());
+		//(For Debug)
+		if (updateFrameCounter % 60 == 0) {
+			text1.text = updateDuration.ToString ();
+			text2.text = updateFrameCounter.ToString ();
 		}
-		*/
 
 		//if new value has input to stimulus
 		if (tmpInt_p1 != tmpInt_previous) {
 			//Debug.Log ("Before: " + Time.time);
 			stimulusFrameCounter = 1;
 			//serialHandler.Write (tmpInt_p1.ToString ());
-			serialHandler.CommandReceiver (tmpInt_p1);
+			serialHandler.setCommand (tmpInt_p1);
 			Debug.Log ("tmpInt_p1.ToString (): " + tmpInt_p1.ToString ());
 		}
 
 		if (stimulusFrameCounter == 7) {
 			//Debug.Log ("==========After==========: " + Time.time);
 			stimulusFrameCounter = 0;
-			tmpInt_p1 = 0;
+			tmpInt_p1 = 99;
 			//Debug.Log ("=== stimulusFrameCounter ===: " + stimulusFrameCounter);
 		} else if (stimulusFrameCounter > 0) {
 			//Debug.Log ("=== stimulusFrameCounter ===: " + stimulusFrameCounter);
 			++stimulusFrameCounter;
 		}
 
-
-		if (updateFrameCounter % 60 == 0) {
-			text1.text = updateDuration.ToString ();
-			text2.text = updateFrameCounter.ToString ();
-		}
-
-		if (TrialFlag == 60) 
-			TrialFlag = 0;
+		if ((stateMachine.getTrialFlag ()) == 60) 
+			stateMachine.resetTrialFlag ();
 
 		//Flash box
-		box_10hz.Box (TrialFlag);
-		box_12hz.Box (TrialFlag);
-		box_15hz.Box (TrialFlag);
-		box_20hz.Box (TrialFlag);
+		box_10hz.Box (stateMachine.getTrialFlag());
+		box_12hz.Box (stateMachine.getTrialFlag());
+		box_15hz.Box (stateMachine.getTrialFlag());
+		box_20hz.Box (stateMachine.getTrialFlag());
 
 		//(For Debug) Counter to assure flashing frequencies for each boxes on production
-		text10.text = box_10hz.GetCounter ();
-		text12.text = box_12hz.GetCounter ();
-		text15.text = box_15hz.GetCounter ();
-		text20.text = box_20hz.GetCounter ();
+		text10.text = box_10hz.getCounter ();
+		text12.text = box_12hz.getCounter ();
+		text15.text = box_15hz.getCounter ();
+		text20.text = box_20hz.getCounter ();
 	
 		//Finally
 		//To distingish whther tmpInt_p1 is same or not

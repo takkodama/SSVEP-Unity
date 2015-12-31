@@ -16,51 +16,41 @@ public class KeyController : MonoBehaviour {
 	void Update()
 	{
 		if ( Input.GetKeyDown(KeyCode.A) ) {
-			serialHandler.Write("0");
+			serialHandler.setCommand(0);
 		}
 		if ( Input.GetKeyDown(KeyCode.S) ) {
-			serialHandler.Write("1");
+			serialHandler.setCommand(1);
 		}
 		if ( Input.GetKeyDown(KeyCode.D) ) {
-			serialHandler.Write("2");
+			serialHandler.setCommand(2);
 		}
 		if ( Input.GetKeyDown(KeyCode.F) ) {
-			serialHandler.Write("3");
-		}
-		if ( Input.GetKeyDown(KeyCode.G) ) {
-			serialHandler.Write("4");
-		}
-		if ( Input.GetKeyDown(KeyCode.H) ) {
-			serialHandler.Write("5");
+			serialHandler.setCommand(3);
 		}
 
 		//===
 
-		if ( Input.GetKeyDown(KeyCode.Q) ) {
+		if ( Input.GetKeyDown(KeyCode.Q) ) { //EX: START TR: START (state == 11)
 			boxController.portSetter(33025, 33025, 33025, 32769, 32773);
 		}
-		if ( Input.GetKeyDown(KeyCode.W) ) {
+		if ( Input.GetKeyDown(KeyCode.W) ) { //EX: START TR: START
 			boxController.portSetter(33026, 33026, 33026, 32769, 32773);
 		}
-		if ( Input.GetKeyDown(KeyCode.E) ) {
+		if ( Input.GetKeyDown(KeyCode.E) ) { //EX: START TR: START
 			boxController.portSetter(33027, 33027, 33027, 32769, 32773);
 		}
-		if ( Input.GetKeyDown(KeyCode.R) ) {
+		if ( Input.GetKeyDown(KeyCode.R) ) { //EX: START TR: START
 			boxController.portSetter(33028, 33028, 33028, 32769, 32773);
 		}
-		if ( Input.GetKeyDown(KeyCode.R) ) {
-			serialHandler.Write("4");
-		}
-		if ( Input.GetKeyDown(KeyCode.T) ) {
-			serialHandler.Write("5");
+
+		if ( Input.GetKeyDown(KeyCode.T) ) { //EX: STOP TR: STOP (state == 00)
+			boxController.portSetter(33024, 33024, 33024, 32770, 32774);
 		}
 
+		if ( Input.GetKeyDown(KeyCode.Y) ) { //EX: START TR: STOP (state == 10) 
+			boxController.portSetter(33024, 33025, 33024, 32769, 32774); //(* set target 1)
+		}
 
-	}
-
-	public void Aho()
-	{
-		serialHandler.Write("0");
 	}
 
 }
