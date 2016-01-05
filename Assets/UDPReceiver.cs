@@ -35,7 +35,7 @@ public class UDPReceiver : MonoBehaviour
 		receivedSignal2 = "33024"; //Target - Label number
 		receivedSignal3 = "33024"; //Result - Label number
 		receivedSignal4 = "32770"; //Experiment start(32769) Default: stop(32770)
-		receivedSignal5 = "0"; //Trial start(32773) Default: stop(32774)
+		receivedSignal5 = "0"; 	   //Trial start(32773) stop(32774) Default: 0
 		udp1 = new UdpClient (PORT_NO_1);
 		udp2 = new UdpClient (PORT_NO_2);
 		udp3 = new UdpClient (PORT_NO_3);
@@ -63,7 +63,7 @@ public class UDPReceiver : MonoBehaviour
 		thread5.Start(); 
 	}
 
-	public void PORT_SET (int received_PORT_NO_1, int received_PORT_NO_2, int received_PORT_NO_3, int received_PORT_NO_4, int received_PORT_NO_5) {
+	public void PORT_SET_INIT (int received_PORT_NO_1, int received_PORT_NO_2, int received_PORT_NO_3, int received_PORT_NO_4, int received_PORT_NO_5) {
 		PORT_NO_1 = received_PORT_NO_1;
 		PORT_NO_2 = received_PORT_NO_2;
 		PORT_NO_3 = received_PORT_NO_3;
@@ -71,23 +71,47 @@ public class UDPReceiver : MonoBehaviour
 		PORT_NO_5 = received_PORT_NO_5;
 	}
 
-	public int PORT_GET_1 () {
+	public void PORT1_valueRESET () {
+		receivedSignal1 = "33123";
+	}
+
+	public void PORT1_valueSET (int received_PORT_NO_1) {
+		receivedSignal1 = received_PORT_NO_1.ToString();
+	}
+
+	public void PORT2_valueSET (int received_PORT_NO_2) {
+		receivedSignal2 = received_PORT_NO_2.ToString();
+	}
+
+	public void PORT3_valueSET (int received_PORT_NO_3) {
+		receivedSignal3 = received_PORT_NO_3.ToString();
+	}
+
+	public void PORT4_valueSET (int received_PORT_NO_4) {
+		receivedSignal4 = received_PORT_NO_4.ToString();
+	}
+
+	public void PORT5_valueSET (int received_PORT_NO_5) {
+		receivedSignal5 = received_PORT_NO_5.ToString();
+	}
+
+	public int PORT1_valueGET () {
 		return System.Int32.Parse (receivedSignal1);
 	}
 
-	public int PORT_GET_2 () {
+	public int PORT2_valueGET () {
 		return System.Int32.Parse (receivedSignal2);
 	}
 
-	public int PORT_GET_3 () {
+	public int PORT3_valueGET () {
 		return System.Int32.Parse (receivedSignal3);
 	}
 	
-	public int PORT_GET_4 () {
+	public int PORT4_valueGET () {
 		return System.Int32.Parse (receivedSignal4);
 	}
 
-	public int PORT_GET_5 () {
+	public int PORT5_valueGET () {
 		return System.Int32.Parse (receivedSignal5);
 	}
 
@@ -95,15 +119,15 @@ public class UDPReceiver : MonoBehaviour
 	{
 	}
 	
-	void OnApplicationQuit()
+	public void OnApplicationQuit()
 	{
+		Debug.Log ("Thread Aborted");
 		thread1.Abort();
 		thread2.Abort();
 		thread3.Abort();
 		thread4.Abort();
 		thread5.Abort();
 	}
-	
 
 	//(memo)This method may keep opening 
 	public void ThreadMethod1()

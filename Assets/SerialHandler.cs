@@ -5,13 +5,17 @@ using System.IO.Ports;
 using System.Threading;
 
 public class SerialHandler : MonoBehaviour {
-	
+
+	// === === === === For debug === === === === 
+	//private BoxController boxController;
+	// === === === === For debug === === === === 
+
 	public delegate void SerialDataReceivedEventHandler(string message);
 	public event SerialDataReceivedEventHandler OnDataReceived;
 	
 	//public string portName = "COM6";
-	public string portName = "COM4";
-	public int baudRate    = 9600;
+	private string portName = "COM4";
+	private int baudRate    = 9600;
 	
 	private static SerialPort serialPort_;
 	private Thread thread_;
@@ -22,9 +26,18 @@ public class SerialHandler : MonoBehaviour {
 	
 	void Awake()
 	{
-		Open();
+		//Open();
 	}
-	
+
+	void Start()
+	{
+		// === === === === For debug === === === === 
+		//boxController = GetComponent<BoxController> ();
+		// === === === === For debug === === === === 
+		Open();
+
+	}
+
 	void Update()
 	{
 		if (isNewMessageReceived_) {
@@ -32,15 +45,19 @@ public class SerialHandler : MonoBehaviour {
 		}
 	}
 	
-	void OnDestroy()
+	public void OnDestroy()
 	{
-		Close();
+		serialPort_.Close();
 	}
 	
-	private void Open()
+	public void Open()
 	{
+		// === === === === For debug === === === === 
+		//boxController.text_MessageLog.text = "(SerialHaldler.cs) PORT opening";
+		// === === === === For debug === === === === 
+
 		serialPort_ = new SerialPort(portName, baudRate, Parity.None, 8, StopBits.One);
-		serialPort_.ReadTimeout = 10000;
+		serialPort_.ReadTimeout = 200;
 		serialPort_.Open();
 		
 		isRunning_ = true;
@@ -104,6 +121,11 @@ public class SerialHandler : MonoBehaviour {
 	{
 		try {
 			//Debug.Log("=> Before" + Time.time);
+
+			// === === === === For debug === === === === 
+			//boxController.text_MessageLog.text = "(SerialHaldler.cs) Write message";
+			// === === === === For debug === === === === 
+
 			serialPort_.Write (message);
 			StartCoroutine(DelayMethod(0.1f, () =>
 			                           {

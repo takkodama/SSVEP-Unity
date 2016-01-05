@@ -61,11 +61,11 @@ public class StateMachine : MonoBehaviour {
 	*/
 
 	public string Statement(int portValue1, int portValue2){
-		if (portValue1 == 32769) { //EX:START
+		if (portValue1 == 32769 || portValue1 == 33024) { //EX:START (OVTK_StimulationId_VisualStimulationStart or OVTK_StimulationId_Label_00 => when released)
 			statement = 10;
 
 			if (portValue2 == 32773 || portValue2 == 32779) { //32779 == OVTK_StimulationId_VisualStimulationStart 
-				Debug.Log ("Trial Start");
+				//Debug.Log ("Trial Start");
 				statement = 11;
 				
 				TrialFlag++;
@@ -75,7 +75,7 @@ public class StateMachine : MonoBehaviour {
 				
 				return "TR:START";
 			} else if (portValue2 == 32774 || portValue2 == 32780) { //32780 == OVTK_StimulationId_VisualStimulationStop
-				Debug.Log ("Trial Stop");
+				//Debug.Log ("Trial Stop");
 				statement = 10;
 				
 				TrialFlag = 0;
@@ -108,4 +108,5 @@ public class StateMachine : MonoBehaviour {
 	public int getRestFlag () {
 		return RestFlag;
 	}
+	
 }

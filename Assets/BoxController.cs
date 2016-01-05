@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine.UI;
 
-
 public class BoxController : MonoBehaviour {
 
 	//Declare Classes
@@ -33,24 +32,28 @@ public class BoxController : MonoBehaviour {
 	public GameObject systemObj_I2;
 	public GameObject systemObj_I3;
 	public GameObject systemObj_I4;
-	//public GameObject systemObj25;
+	public GameObject systemObj_boxI1;
+	public GameObject systemObj_boxI2;
+	public GameObject systemObj_boxI3;
+	public GameObject systemObj_boxI4;
+	public GameObject systemObj_MessageLog;
 
 	//Frame counter (NOT debug)
-	private int TrialFlag = 0;
-	private int RestFlag = 0;
+	//private int TrialFlag = 0;
+	//private int RestFlag = 0;
 
 	//GET UDP signals
 	private int tmpInt_p1, tmpInt_p2, tmpInt_p3, tmpInt_p4, tmpInt_p5, tmpInt_previous;
 	
 	//(For debug) Each boxes counter
 	public GameObject systemObj5;
-	public GameObject systemObj6;
+	//public GameObject systemObj6;
 	public GameObject systemObj7;
 	public GameObject systemObj8;
 	public GameObject systemObj9;
 	public GameObject systemObj10;
 	public Text text1;
-	public Text text2;
+	//public Text text2;
 	public Text text10;
 	public Text text12;
 	public Text text15;
@@ -59,11 +62,16 @@ public class BoxController : MonoBehaviour {
 	public Text text_Indicator2;
 	public Text text_Indicator3;
 	public Text text_Indicator4;
-	//public Text text_Indicator5;
+	public Text box_Indicator1;
+	public Text box_Indicator2;
+	public Text box_Indicator3;
+	public Text box_Indicator4;
+	public Text text_MessageLog;
+	private float Debug_Before, Debug_After, Debug_Duration;
 
 	//(For debug) Received PORT number
 	public GameObject systemObj11, systemObj12, systemObj13, systemObj14, systemObj15;
-	public Text text_PORT1, text_PORT2, text_PORT3, text_PORT4, text_PORT5;
+	public Text text_PORT1, text_PORT2, text_PORT3, text_PORT4;
 
 	//(For debug) Frame Counter and Elapsed Time
 	private float updateDuration = 0.0f;
@@ -73,7 +81,8 @@ public class BoxController : MonoBehaviour {
 	private int stimulusFrameCounter = 0;
 
 	//Flicker pattern arrays
-	private int[] pat10, pat12, pat15, pat20, pat30;
+	private int[] pat10, pat12, pat15, pat20;
+	//private int[] pat30;
 
 	// Use this for initialization
 	void Start () {
@@ -82,7 +91,7 @@ public class BoxController : MonoBehaviour {
 
 		//Set UDPReceiver instance & Port number set
 		udprcv = GetComponent<UDPReceiver> ();
-		udprcv.PORT_SET (20321, 20322, 20323, 20324, 20326);
+		udprcv.PORT_SET_INIT (20321, 20322, 20323, 20324, 20326);
 
 		//Set serialHandler
 		serialHandler = GetComponent<SerialHandler> ();
@@ -104,11 +113,15 @@ public class BoxController : MonoBehaviour {
 		text_Indicator2 = systemObj_I2.GetComponent<Text> ();
 		text_Indicator3 = systemObj_I3.GetComponent<Text> ();
 		text_Indicator4 = systemObj_I4.GetComponent<Text> ();
-		//text_Indicator5 = systemObj25.GetComponent<Text> ();
+		box_Indicator1 = systemObj_boxI1.GetComponent<Text> ();
+		box_Indicator2 = systemObj_boxI2.GetComponent<Text> ();
+		box_Indicator3 = systemObj_boxI3.GetComponent<Text> ();
+		box_Indicator4 = systemObj_boxI4.GetComponent<Text> ();
+		text_MessageLog = systemObj_MessageLog.GetComponent<Text> ();
 
 		//(For debug)
 		text1 = systemObj5.GetComponent<Text> ();
-		text2 = systemObj6.GetComponent<Text> ();
+		//text2 = systemObj6.GetComponent<Text> ();
 		text10 = systemObj7.GetComponent<Text> ();
 		text12 = systemObj8.GetComponent<Text> ();
 		text15 = systemObj9.GetComponent<Text> ();
@@ -117,7 +130,7 @@ public class BoxController : MonoBehaviour {
 		text_PORT2 = systemObj12.GetComponent<Text> ();
 		text_PORT3 = systemObj13.GetComponent<Text> ();
 		text_PORT4 = systemObj14.GetComponent<Text> ();
-		text_PORT5 = systemObj15.GetComponent<Text> ();
+		//text_PORT5 = systemObj15.GetComponent<Text> ();
 
 		//Set BoxFlicker instance
 		box_10hz = systemObj1.AddComponent<BoxFlicker>(); 
@@ -131,7 +144,7 @@ public class BoxController : MonoBehaviour {
 		pat12 = patternArray.getPat12();
 		pat15 = patternArray.getPat15();
 		pat20 = patternArray.getPat20();
-		pat30 = patternArray.getPat30();
+		//pat30 = patternArray.getPat30();
 
 		box_10hz.Setting (pat10, box1);
 		box_12hz.Setting (pat12, box2);
@@ -140,29 +153,52 @@ public class BoxController : MonoBehaviour {
 	}
 
 	//For debug
+	//will not need soon
+	/*
 	public void portSetter (int p1, int p2, int p3, int p4, int p5){
+		text_MessageLog.text = "port set";
 		tmpInt_p1 = p1 - 33024;
 		tmpInt_p2 = p2 - 33024;
 		tmpInt_p3 = p3 - 33024;
 		tmpInt_p4 = p4;
 		tmpInt_p5 = p5;
 	}
+	*/
+
+	//For debug
+	public void serialOpener () {
+		serialHandler.Open ();
+	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		//Yellow depict OFF (Only 180 frames)
+		if (stateMachine.getRestFlag() > 1 && stateMachine.getRestFlag() < 180) {
+			tmpInt_p2 = 0;
+			/*
+			text_Indicator1.color = indicatorSetter.Indicator1(0);
+			text_Indicator2.color = indicatorSetter.Indicator2(0);
+			text_Indicator3.color = indicatorSetter.Indicator3(0);
+			text_Indicator4.color = indicatorSetter.Indicator4(0);
+			*/
+		}
+
 		//Debug.Log ("========= For Debug =========");
 
 		//GET UDP signals
-		//tmpInt_p1 = udprcv.PORT_GET_1 () - 33024; //Stimulus (PORT: 20321)
-		//tmpInt_p2 = udprcv.PORT_GET_2 () - 33024; //Target (PORT: 20322)
-		//tmpInt_p3 = udprcv.PORT_GET_3 () - 33024; //Result (PORT: 20323)
-		//tmpInt_p4 = udprcv.PORT_GET_4 (); //Experiment start(32769) Default: stop(32770)  (PORT: 20324)
-		//tmpInt_p5 = udprcv.PORT_GET_5 (); //Trial start(32773) stop(32774) (PORT: 20326) Default:0 
+		tmpInt_p1 = udprcv.PORT1_valueGET () - 33024; //Stimulus
+		tmpInt_p2 = udprcv.PORT2_valueGET () - 33024; //Target 
+		tmpInt_p3 = udprcv.PORT3_valueGET () - 33024; //Result 
+		tmpInt_p4 = udprcv.PORT4_valueGET (); //Experiment start(32769) Default: stop(32770)  
+		tmpInt_p5 = udprcv.PORT5_valueGET (); //Trial start(32773) stop(32774)  Default:0 
 
 		//Put them screen texts
 		text_PORT1.text = tmpInt_p1.ToString (); //will not need (For debug)
 		text_PORT2.text = tmpInt_p2.ToString (); //Target
 		text_PORT3.text = tmpInt_p3.ToString (); //Result
+		//text_MessageLog.text = tmpInt_p4.ToString ();
+		//text_MessageLog.text = tmpInt_p5.ToString ();
 		//text_PORT4.text = tmpInt_p4.ToString (); //will not need (For debug)
 		//text_PORT5.text = tmpInt_p5.ToString (); //will not need (For debug)
 
@@ -201,19 +237,7 @@ public class BoxController : MonoBehaviour {
 		}
 		*/
 		//text_PORT5.text = stateMachine.TrialStatement (tmpInt_p5);
-
 		text_PORT4.text = stateMachine.Statement (tmpInt_p4, tmpInt_p5);
-
-		//Yellow depict OFF (Only 180 frames)
-		if (stateMachine.getRestFlag() > 1 && stateMachine.getRestFlag() < 180) {
-			tmpInt_p2 = 0;
-			/*
-			text_Indicator1.color = indicatorSetter.Indicator1(0);
-			text_Indicator2.color = indicatorSetter.Indicator2(0);
-			text_Indicator3.color = indicatorSetter.Indicator3(0);
-			text_Indicator4.color = indicatorSetter.Indicator4(0);
-			*/
-		}
 
 		//Depict TARGET and stimulus position on pic
 		// -- depict1 ~ 4
@@ -221,6 +245,10 @@ public class BoxController : MonoBehaviour {
 		text_Indicator2.color = indicatorSetter.Indicator2(tmpInt_p2);
 		text_Indicator3.color = indicatorSetter.Indicator3(tmpInt_p2);
 		text_Indicator4.color = indicatorSetter.Indicator4(tmpInt_p2);
+		box_Indicator1.color = indicatorSetter.boxIndicator1(tmpInt_p2);
+		box_Indicator2.color = indicatorSetter.boxIndicator2(tmpInt_p2);
+		box_Indicator3.color = indicatorSetter.boxIndicator3(tmpInt_p2);
+		box_Indicator4.color = indicatorSetter.boxIndicator4(tmpInt_p2);
 
 		//==============================
 
@@ -231,25 +259,35 @@ public class BoxController : MonoBehaviour {
 		//(For Debug)
 		if (updateFrameCounter % 60 == 0) {
 			text1.text = updateDuration.ToString ();
-			text2.text = updateFrameCounter.ToString ();
+			//text2.text = updateFrameCounter.ToString ();
 		}
 
 		//if new value has input to stimulus
-		if (tmpInt_p1 != tmpInt_previous) {
-			//Debug.Log ("Before: " + Time.time);
+		if (tmpInt_p1 != tmpInt_previous && tmpInt_p1 != 99) {
+			//Debug.Log ("===== Before : " + Time.time);
+			// === Debug ===
+			Debug_Before = Time.time;
+			Debug.Log ("tmpInt_p1 " + tmpInt_p1.ToString ());
+			// === Debug ===
+
 			stimulusFrameCounter = 1;
 			//serialHandler.Write (tmpInt_p1.ToString ());
 			serialHandler.setCommand (tmpInt_p1);
-			Debug.Log ("tmpInt_p1.ToString (): " + tmpInt_p1.ToString ());
+			//Debug.Log ("stimulusFrameCounter " + stimulusFrameCounter);
 		}
 
+//		Debug.Log ("=== stimulusFrameCounter ===: " + stimulusFrameCounter);
+
 		if (stimulusFrameCounter == 7) {
-			//Debug.Log ("==========After==========: " + Time.time);
+			// === Debug ===
+			Debug_Duration = Time.time - Debug_Before;
+			Debug.Log ("===== Duration : " + Debug_Duration.ToString() );
+			text_MessageLog.text = Debug_Duration.ToString();
+			// === Debug ===
+
 			stimulusFrameCounter = 0;
-			tmpInt_p1 = 99;
-			//Debug.Log ("=== stimulusFrameCounter ===: " + stimulusFrameCounter);
+			udprcv.PORT1_valueRESET();
 		} else if (stimulusFrameCounter > 0) {
-			//Debug.Log ("=== stimulusFrameCounter ===: " + stimulusFrameCounter);
 			++stimulusFrameCounter;
 		}
 
