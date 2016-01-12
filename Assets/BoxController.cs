@@ -22,10 +22,10 @@ public class BoxController : MonoBehaviour {
 	public Image box2;
 	public Image box3;
 	public Image box4;
-	private BoxFlicker box_10hz;
-	private BoxFlicker box_12hz;
-	private BoxFlicker box_15hz;
-	private BoxFlicker box_20hz;
+	private BoxFlicker box_A;
+	private BoxFlicker box_B;
+	private BoxFlicker box_C;
+	private BoxFlicker box_D;
 
 	//Indicator in pics
 	public GameObject systemObj_I1;
@@ -81,7 +81,10 @@ public class BoxController : MonoBehaviour {
 	private int stimulusFrameCounter = 0;
 
 	//Flicker pattern arrays
-	private int[] pat10, pat12, pat15, pat20;
+	private int[] patA = new int[60];
+	private int[] patB = new int[60];
+	private int[] patC = new int[60];
+	private int[] patD = new int[60];
 	//private int[] pat30;
 
 	// Use this for initialization
@@ -133,23 +136,23 @@ public class BoxController : MonoBehaviour {
 		//text_PORT5 = systemObj15.GetComponent<Text> ();
 
 		//Set BoxFlicker instance
-		box_10hz = systemObj1.AddComponent<BoxFlicker>(); 
-		box_12hz = systemObj2.AddComponent<BoxFlicker>(); 
-		box_15hz = systemObj3.AddComponent<BoxFlicker>(); 
-		box_20hz = systemObj4.AddComponent<BoxFlicker>(); 
+		box_A = systemObj1.AddComponent<BoxFlicker>(); 
+		box_B = systemObj2.AddComponent<BoxFlicker>(); 
+		box_C = systemObj3.AddComponent<BoxFlicker>(); 
+		box_D = systemObj4.AddComponent<BoxFlicker>(); 
 
 		//Set patternArray
 		patternArray = GetComponent<PatternArray> ();
-		pat10 = patternArray.getPat10();
-		pat12 = patternArray.getPat12();
-		pat15 = patternArray.getPat15();
-		pat20 = patternArray.getPat20();
+		patA = patternArray.getPat7();
+		patB = patternArray.getPat9();
+		patC = patternArray.getPat11();
+		patD = patternArray.getPat13();
 		//pat30 = patternArray.getPat30();
 
-		box_10hz.Setting (pat10, box1);
-		box_12hz.Setting (pat12, box2);
-		box_15hz.Setting (pat15, box3);
-		box_20hz.Setting (pat20, box4);
+		box_A.Setting (patA, box1);
+		box_B.Setting (patB, box2);
+		box_C.Setting (patC, box3);
+		box_D.Setting (patD, box4);
 	}
 
 	//For debug
@@ -295,16 +298,16 @@ public class BoxController : MonoBehaviour {
 			stateMachine.resetTrialFlag ();
 
 		//Flash box
-		box_10hz.Box (stateMachine.getTrialFlag());
-		box_12hz.Box (stateMachine.getTrialFlag());
-		box_15hz.Box (stateMachine.getTrialFlag());
-		box_20hz.Box (stateMachine.getTrialFlag());
+		box_A.Box (stateMachine.getTrialFlag());
+		box_B.Box (stateMachine.getTrialFlag());
+		box_C.Box (stateMachine.getTrialFlag());
+		box_D.Box (stateMachine.getTrialFlag());
 
 		//(For Debug) Counter to assure flashing frequencies for each boxes on production
-		text10.text = box_10hz.getCounter ();
-		text12.text = box_12hz.getCounter ();
-		text15.text = box_15hz.getCounter ();
-		text20.text = box_20hz.getCounter ();
+		text10.text = box_A.getCounter ();
+		text12.text = box_B.getCounter ();
+		text15.text = box_C.getCounter ();
+		text20.text = box_D.getCounter ();
 	
 		//Finally
 		//To distingish whther tmpInt_p1 is same or not
