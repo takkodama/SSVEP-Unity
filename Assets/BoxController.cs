@@ -54,10 +54,10 @@ public class BoxController : MonoBehaviour {
 	public GameObject systemObj10;
 	public Text text1;
 	//public Text text2;
-	public Text text10;
-	public Text text12;
-	public Text text15;
-	public Text text20;
+	public Text textA;
+	public Text textB;
+	public Text textC;
+	public Text textD;
 	public Text text_Indicator1;
 	public Text text_Indicator2;
 	public Text text_Indicator3;
@@ -125,10 +125,10 @@ public class BoxController : MonoBehaviour {
 		//(For debug)
 		text1 = systemObj5.GetComponent<Text> ();
 		//text2 = systemObj6.GetComponent<Text> ();
-		text10 = systemObj7.GetComponent<Text> ();
-		text12 = systemObj8.GetComponent<Text> ();
-		text15 = systemObj9.GetComponent<Text> ();
-		text20 = systemObj10.GetComponent<Text> ();
+		textA = systemObj7.GetComponent<Text> ();
+		textB = systemObj8.GetComponent<Text> ();
+		textC = systemObj9.GetComponent<Text> ();
+		textD = systemObj10.GetComponent<Text> ();
 		text_PORT1 = systemObj11.GetComponent<Text> ();
 		text_PORT2 = systemObj12.GetComponent<Text> ();
 		text_PORT3 = systemObj13.GetComponent<Text> ();
@@ -143,10 +143,11 @@ public class BoxController : MonoBehaviour {
 
 		//Set patternArray
 		patternArray = GetComponent<PatternArray> ();
-		patA = patternArray.getPat7();
-		patB = patternArray.getPat9();
-		patC = patternArray.getPat11();
-		patD = patternArray.getPat13();
+		patA = patternArray.getPat11();
+		patB = patternArray.getPat18();
+		patC = patternArray.getPat14();
+		patD = patternArray.getPat21();
+
 		//pat30 = patternArray.getPat30();
 
 		box_A.Setting (patA, box1);
@@ -304,11 +305,11 @@ public class BoxController : MonoBehaviour {
 		box_D.Box (stateMachine.getTrialFlag());
 
 		//(For Debug) Counter to assure flashing frequencies for each boxes on production
-		text10.text = box_A.getCounter ();
-		text12.text = box_B.getCounter ();
-		text15.text = box_C.getCounter ();
-		text20.text = box_D.getCounter ();
-	
+		textA.text = box_A.getCounter ();
+		textB.text = box_B.getCounter ();
+		textC.text = box_C.getCounter ();
+		textD.text = box_D.getCounter ();
+
 		//Finally
 		//To distingish whther tmpInt_p1 is same or not
 		tmpInt_previous = tmpInt_p1;

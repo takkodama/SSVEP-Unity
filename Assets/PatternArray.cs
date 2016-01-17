@@ -50,7 +50,15 @@ public class PatternArray : MonoBehaviour {
 	private int[] pattern16 = new int[60];
 	private int[] pattern17 = new int[60];
 	private int[] pattern18 = new int[60];
-	private int[] pattern19 = new int[60];
+	//private int[] pattern19 = new int[60];
+	private int[] pattern21 = new int[60];
+	private int[] pattern22 = new int[60];
+	private int[] pattern23 = new int[60];
+	private int[] pattern24 = new int[60];
+	private int[] pattern25 = new int[60];
+	private int[] pattern26 = new int[60];
+	
+
 
 	// Use this for initialization
 	void Start () {
@@ -148,8 +156,10 @@ public class PatternArray : MonoBehaviour {
 	public int[] getPat14 () {
 		patternA.CopyTo(pattern14, 0);
 		patternA.CopyTo(pattern14, 10);
-		patternC.CopyTo(pattern14, 20);
-		patternC.CopyTo(pattern14, 40);
+		patternA.CopyTo(pattern14, 20);
+		patternA.CopyTo(pattern14, 30);
+		patternD.CopyTo(pattern14, 40);
+		patternD.CopyTo(pattern14, 50);
 		return pattern14;
 	}
 
@@ -160,5 +170,69 @@ public class PatternArray : MonoBehaviour {
 		patternD.CopyTo(pattern16, 50);
 		return pattern16;
 	}
+
+	public int[] getPat17 () {
+		patternA.CopyTo(pattern17, 0);
+		patternA.CopyTo(pattern17, 10);
+		patternC.CopyTo(pattern17, 20);
+		patternD.CopyTo(pattern17, 40);
+		patternD.CopyTo(pattern17, 50);
+		return pattern17;
+	}
+	
+	public int[] getPat18 () {
+		patternA.CopyTo(pattern18, 0);
+		patternA.CopyTo(pattern18, 10);
+		patternA.CopyTo(pattern18, 20);
+		patternD.CopyTo(pattern18, 30);
+		patternD.CopyTo(pattern18, 40);
+		patternD.CopyTo(pattern18, 50);
+		return pattern18;
+	}
+	
+	//getPat19 ... is not able to create
+	
+	public int[] getPat21 () {
+		patternA.CopyTo(pattern21, 0);
+		patternC.CopyTo(pattern21, 10);
+		patternD.CopyTo(pattern21, 30);
+		patternD.CopyTo(pattern21, 40);
+		patternD.CopyTo(pattern21, 50);
+		return pattern21;
+	}
+	
+	public int[] getPat22 () {
+		patternA.CopyTo(pattern22, 0);
+		patternD.CopyTo(pattern22, 10);
+		patternD.CopyTo(pattern22, 20);
+		patternA.CopyTo(pattern22, 30);
+		patternD.CopyTo(pattern22, 40);
+		patternD.CopyTo(pattern22, 50);
+		return pattern22;
+	}
+	
+	//getPat23 ... is not able to create
+	//getPat24 ... is not able to create
+	
+	public int[] getPat25 () {
+		patternD.CopyTo(pattern25, 0);
+		patternD.CopyTo(pattern25, 10);
+		patternC.CopyTo(pattern25, 20);
+		patternD.CopyTo(pattern25, 40);
+		patternD.CopyTo(pattern25, 50);
+		return pattern25;
+	}
+	
+	public int[] getPat26 () {
+		patternA.CopyTo(pattern26, 0);
+		patternD.CopyTo(pattern26, 10);
+		patternD.CopyTo(pattern26, 20);
+		patternD.CopyTo(pattern26, 30);
+		patternD.CopyTo(pattern26, 40);
+		patternD.CopyTo(pattern26, 50);
+		return pattern26;
+	}
+	
+
 
 }
