@@ -143,10 +143,10 @@ public class BoxController : MonoBehaviour {
 
 		//Set patternArray
 		patternArray = GetComponent<PatternArray> ();
-		patA = patternArray.getPat11();
-		patB = patternArray.getPat18();
-		patC = patternArray.getPat14();
-		patD = patternArray.getPat21();
+		patA = patternArray.getPat7_sin_plus1();
+		patB = patternArray.getPat12_sin_plus1();
+		patC = patternArray.getPat15();
+		patD = patternArray.getPat20_sin_plus1();
 
 		//pat30 = patternArray.getPat30();
 

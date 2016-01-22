@@ -33,6 +33,7 @@ public class PatternArray : MonoBehaviour {
 		1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
 		1, 1, 0, 0, 0, 0, 1, 1, 1, 1
 	};
+
 	
 	private int[] pattern10 = new int[60];
 	private int[] pattern12 = new int[60];
@@ -57,8 +58,62 @@ public class PatternArray : MonoBehaviour {
 	private int[] pattern24 = new int[60];
 	private int[] pattern25 = new int[60];
 	private int[] pattern26 = new int[60];
-	
 
+
+	private int[] pattern7_sin = new int[] {
+		0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
+		0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 
+		1, 1, 1, 1, 0, 0, 0, 0, 1, 1,
+		1, 1, 0, 0, 0, 0, 1, 1, 1, 1,
+		0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 
+		0, 0, 1, 1, 1, 1, 0, 0, 0, 0
+	};
+
+	private int[] pattern12_sin = new int[] {
+		0, 0, 1, 1, 1, 0, 0, 0, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 0, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 0, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 0, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 0, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 0, 1, 1
+	};
+
+	private int[] pattern20_sin = new int[] {
+		0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+		0, 1, 0, 1, 1, 0, 0, 1, 0, 1,
+		1, 0, 0, 1, 0, 1, 1, 0, 0, 1,
+		0, 1, 1, 0, 0, 1, 0, 1, 1, 0,
+		0, 1, 0, 1, 1, 0, 0, 1, 0, 1,
+		1, 0, 0, 1, 0, 1, 1, 0, 0, 1
+	};
+
+	private int[] pattern7_sin_plus1 = new int[] {
+		0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 
+		0, 0, 0, 1, 1, 1, 1, 0, 0, 0,
+		0, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+		1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 
+		1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 
+		1, 0, 0, 0, 0, 1, 1, 1, 1, 1
+	};
+	
+	private int[] pattern12_sin_plus1 = new int[] {
+		0, 0, 1, 1, 1, 0, 0, 1, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 1, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 1, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 1, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 1, 1, 1,
+		0, 0, 1, 1, 1, 0, 0, 1, 1, 1
+	};
+
+
+	private int[] pattern20_sin_plus1 = new int[] {
+		0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
+		1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
+		1, 0, 1, 1, 0, 1, 1, 0, 1, 1,
+		0, 1, 1, 0, 1, 1, 0, 1, 1, 0,
+		1, 1, 0, 1, 1, 0, 1, 1, 0, 1,
+		1, 0, 1, 1, 0, 1, 1, 0, 1, 1
+	};
 
 	// Use this for initialization
 	void Start () {
@@ -70,6 +125,7 @@ public class PatternArray : MonoBehaviour {
 	
 	}
 
+
 	//Steady
 	public int[] getPat10 () {
 		patternB.CopyTo(pattern10, 0);
@@ -79,11 +135,37 @@ public class PatternArray : MonoBehaviour {
 	
 	public int[] getPat12 () {
 		patternA.CopyTo(pattern12, 0);
-		patternC.CopyTo(pattern12, 10);
-		patternA.CopyTo(pattern12, 30);
+		patternA.CopyTo(pattern12, 10);
+		patternC.CopyTo(pattern12, 20);
 		patternC.CopyTo(pattern12, 40);
+
 		return pattern12;
 	}
+
+	public int[] getPat7_sin () {
+		return pattern7_sin;
+	}
+
+	public int[] getPat12_sin () {
+		return pattern12_sin;
+	}
+
+	public int[] getPat20_sin () {
+		return pattern20_sin;
+	}
+
+	public int[] getPat7_sin_plus1 () {
+		return pattern7_sin_plus1;
+	}
+	
+	public int[] getPat12_sin_plus1 () {
+		return pattern12_sin_plus1;
+	}
+	
+	public int[] getPat20_sin_plus1 () {
+		return pattern20_sin_plus1;
+	}
+
 
 	//Steady
 	public int[] getPat15 () {
@@ -114,17 +196,17 @@ public class PatternArray : MonoBehaviour {
 	}
 
 	public int[] getPat7 () {
-		patternE.CopyTo(pattern7, 0);
-		patternA.CopyTo(pattern7, 40);
-		patternA.CopyTo(pattern7, 50);
+		patternA.CopyTo(pattern7, 0);
+		patternA.CopyTo(pattern7, 10);
+		patternE.CopyTo(pattern7, 20);
 		return pattern7;
 	}
 
 	public int[] getPat8 () {
 		patternA.CopyTo(pattern8, 0);
+		patternB.CopyTo(pattern8, 30);
 		patternA.CopyTo(pattern8, 10);
 		patternA.CopyTo(pattern8, 20);
-		patternB.CopyTo(pattern8, 30);
 		return pattern8;
 	}
 
@@ -146,10 +228,10 @@ public class PatternArray : MonoBehaviour {
 
 	public int[] getPat13 () {
 		patternA.CopyTo(pattern13, 0);
-		patternA.CopyTo(pattern13, 10);
-		patternA.CopyTo(pattern13, 20);
-		patternC.CopyTo(pattern13, 30);
-		patternD.CopyTo(pattern13, 50);
+		patternC.CopyTo(pattern13, 10);
+		patternA.CopyTo(pattern13, 30);
+		patternD.CopyTo(pattern13, 40);
+		patternA.CopyTo(pattern13, 50);
 		return pattern13;
 	}
 
@@ -173,10 +255,10 @@ public class PatternArray : MonoBehaviour {
 
 	public int[] getPat17 () {
 		patternA.CopyTo(pattern17, 0);
-		patternA.CopyTo(pattern17, 10);
-		patternC.CopyTo(pattern17, 20);
 		patternD.CopyTo(pattern17, 40);
+		patternA.CopyTo(pattern17, 10);
 		patternD.CopyTo(pattern17, 50);
+		patternC.CopyTo(pattern17, 20);
 		return pattern17;
 	}
 	
