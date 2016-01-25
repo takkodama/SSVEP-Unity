@@ -58,9 +58,16 @@ public class KeyController : MonoBehaviour {
 
 		//===
 
+		if ( Input.GetKeyDown(KeyCode.V) ) { //EX: START TR: START and Visual:START(state == 12) 
+			udpReceiver.PORT4_valueSET(32769);
+			udpReceiver.PORT5_valueSET(32773);
+			udpReceiver.PORT6_valueSET(32779); 
+		}
+
 		if ( Input.GetKeyDown(KeyCode.B) ) { //EX: START TR: START (state == 11) 
 			udpReceiver.PORT4_valueSET(32769);
 			udpReceiver.PORT5_valueSET(32773);
+			udpReceiver.PORT6_valueSET(32780); 
 		}
 
 		if ( Input.GetKeyDown(KeyCode.N) ) { //EX: START TR: STOP (state == 10) 

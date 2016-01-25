@@ -45,7 +45,7 @@ public class BoxFlicker : MonoBehaviour {
 	}
 
 	public void Flip (int flagMan) {
-		
+		//Debug
 		if (flagMan == 0)
 			updateFrameCounter = 0;
 
@@ -64,8 +64,13 @@ public class BoxFlicker : MonoBehaviour {
 		box.transform.localScale = theScale;
 	}
 
+	//Debug
 	public string getCounter () {
 		return updateFrameCounter.ToString ();
 	}
 
+	public void resetCounter () {
+		updateFrameCounter = 0;
+	}
+	
 }

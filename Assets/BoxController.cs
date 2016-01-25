@@ -43,7 +43,7 @@ public class BoxController : MonoBehaviour {
 	//private int RestFlag = 0;
 
 	//GET UDP signals
-	private int tmpInt_p1, tmpInt_p2, tmpInt_p3, tmpInt_p4, tmpInt_p5, tmpInt_previous;
+	private int tmpInt_p1, tmpInt_p2, tmpInt_p3, tmpInt_p4, tmpInt_p5, tmpInt_p6, tmpInt_previous;
 	
 	//(For debug) Each boxes counter
 	public GameObject systemObj5;
@@ -94,7 +94,7 @@ public class BoxController : MonoBehaviour {
 
 		//Set UDPReceiver instance & Port number set
 		udprcv = GetComponent<UDPReceiver> ();
-		udprcv.PORT_SET_INIT (20321, 20322, 20323, 20324, 20326);
+		udprcv.PORT_SET_INIT (20321, 20322, 20323, 20324, 20326, 20327);
 
 		//Set serialHandler
 		serialHandler = GetComponent<SerialHandler> ();
@@ -144,9 +144,9 @@ public class BoxController : MonoBehaviour {
 		//Set patternArray
 		patternArray = GetComponent<PatternArray> ();
 		patA = patternArray.getPat7_sin_plus1();
-		patB = patternArray.getPat12_sin_plus1();
+		patB = patternArray.getPat12_sin();
 		patC = patternArray.getPat15();
-		patD = patternArray.getPat20_sin_plus1();
+		patD = patternArray.getPat20_sin();
 
 		//pat30 = patternArray.getPat30();
 
@@ -178,7 +178,7 @@ public class BoxController : MonoBehaviour {
 	void Update () {
 
 		//Yellow depict OFF (Only 180 frames)
-		if (stateMachine.getRestFlag() > 1 && stateMachine.getRestFlag() < 180) {
+		if (stateMachine.getRestFlag () > 1 && stateMachine.getRestFlag () < 180) {
 			tmpInt_p2 = 0;
 			/*
 			text_Indicator1.color = indicatorSetter.Indicator1(0);
@@ -186,6 +186,16 @@ public class BoxController : MonoBehaviour {
 			text_Indicator3.color = indicatorSetter.Indicator3(0);
 			text_Indicator4.color = indicatorSetter.Indicator4(0);
 			*/
+			box_A.resetCounter ();
+			box_B.resetCounter ();
+			box_C.resetCounter ();
+			box_D.resetCounter ();
+			stateMachine.resetTrialFlag();
+
+			textA.text = box_A.getCounter ();
+			textB.text = box_B.getCounter ();
+			textC.text = box_C.getCounter ();
+			textD.text = box_D.getCounter ();
 		}
 
 		//Debug.Log ("========= For Debug =========");
@@ -196,6 +206,7 @@ public class BoxController : MonoBehaviour {
 		tmpInt_p3 = udprcv.PORT3_valueGET () - 33024; //Result 
 		tmpInt_p4 = udprcv.PORT4_valueGET (); //Experiment start(32769) Default: stop(32770)  
 		tmpInt_p5 = udprcv.PORT5_valueGET (); //Trial start(32773) stop(32774)  Default:0 
+		tmpInt_p6 = udprcv.PORT6_valueGET (); //32779 == OVTK_StimulationId_VisualStimulationStart, 32780 == OVTK_StimulationId_VisualStimulationStop, Default:0
 
 		//Put them screen texts
 		text_PORT1.text = tmpInt_p1.ToString (); //will not need (For debug)
@@ -241,18 +252,18 @@ public class BoxController : MonoBehaviour {
 		}
 		*/
 		//text_PORT5.text = stateMachine.TrialStatement (tmpInt_p5);
-		text_PORT4.text = stateMachine.Statement (tmpInt_p4, tmpInt_p5);
+		text_PORT4.text = stateMachine.Statement (tmpInt_p4, tmpInt_p5, tmpInt_p6);
 
 		//Depict TARGET and stimulus position on pic
 		// -- depict1 ~ 4
-		text_Indicator1.color = indicatorSetter.Indicator1(tmpInt_p2);
-		text_Indicator2.color = indicatorSetter.Indicator2(tmpInt_p2);
-		text_Indicator3.color = indicatorSetter.Indicator3(tmpInt_p2);
-		text_Indicator4.color = indicatorSetter.Indicator4(tmpInt_p2);
-		box_Indicator1.color = indicatorSetter.boxIndicator1(tmpInt_p2);
-		box_Indicator2.color = indicatorSetter.boxIndicator2(tmpInt_p2);
-		box_Indicator3.color = indicatorSetter.boxIndicator3(tmpInt_p2);
-		box_Indicator4.color = indicatorSetter.boxIndicator4(tmpInt_p2);
+		text_Indicator1.color = indicatorSetter.Indicator1 (tmpInt_p2);
+		text_Indicator2.color = indicatorSetter.Indicator2 (tmpInt_p2);
+		text_Indicator3.color = indicatorSetter.Indicator3 (tmpInt_p2);
+		text_Indicator4.color = indicatorSetter.Indicator4 (tmpInt_p2);
+		box_Indicator1.color = indicatorSetter.boxIndicator1 (tmpInt_p2);
+		box_Indicator2.color = indicatorSetter.boxIndicator2 (tmpInt_p2);
+		box_Indicator3.color = indicatorSetter.boxIndicator3 (tmpInt_p2);
+		box_Indicator4.color = indicatorSetter.boxIndicator4 (tmpInt_p2);
 
 		//==============================
 
@@ -285,12 +296,12 @@ public class BoxController : MonoBehaviour {
 		if (stimulusFrameCounter == 7) {
 			// === Debug ===
 			Debug_Duration = Time.time - Debug_Before;
-			Debug.Log ("===== Duration : " + Debug_Duration.ToString() );
-			text_MessageLog.text = Debug_Duration.ToString();
+			Debug.Log ("===== Duration : " + Debug_Duration.ToString ());
+			text_MessageLog.text = Debug_Duration.ToString ();
 			// === Debug ===
 
 			stimulusFrameCounter = 0;
-			udprcv.PORT1_valueRESET();
+			udprcv.PORT1_valueRESET ();
 		} else if (stimulusFrameCounter > 0) {
 			++stimulusFrameCounter;
 		}
@@ -299,16 +310,18 @@ public class BoxController : MonoBehaviour {
 			stateMachine.resetTrialFlag ();
 
 		//Flash box
-		box_A.Box (stateMachine.getTrialFlag());
-		box_B.Box (stateMachine.getTrialFlag());
-		box_C.Box (stateMachine.getTrialFlag());
-		box_D.Box (stateMachine.getTrialFlag());
+		if (stateMachine.getStatement () == 12) {
+			box_A.Box (stateMachine.getTrialFlag ());
+			box_B.Box (stateMachine.getTrialFlag ());
+			box_C.Box (stateMachine.getTrialFlag ());
+			box_D.Box (stateMachine.getTrialFlag ());
 
-		//(For Debug) Counter to assure flashing frequencies for each boxes on production
-		textA.text = box_A.getCounter ();
-		textB.text = box_B.getCounter ();
-		textC.text = box_C.getCounter ();
-		textD.text = box_D.getCounter ();
+			//(For Debug) Counter to assure flashing frequencies for each boxes on production
+			textA.text = box_A.getCounter ();
+			textB.text = box_B.getCounter ();
+			textC.text = box_C.getCounter ();
+			textD.text = box_D.getCounter ();
+		}
 
 		//Finally
 		//To distingish whther tmpInt_p1 is same or not

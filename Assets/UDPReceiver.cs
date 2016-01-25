@@ -12,22 +12,25 @@ public class UDPReceiver : MonoBehaviour
 	private int PORT_NO_3;
 	private int PORT_NO_4;
 	private int PORT_NO_5;
+	private int PORT_NO_6;
 	private string receivedSignal1;
 	private string receivedSignal2;
 	private string receivedSignal3;
 	private string receivedSignal4;
 	private string receivedSignal5;
+	private string receivedSignal6;
 	private UdpClient udp1;
 	private UdpClient udp2;
 	private UdpClient udp3;
 	private UdpClient udp4;
 	private UdpClient udp5;
-
+	private UdpClient udp6;
 	Thread thread1;
 	Thread thread2;
 	Thread thread3;
 	Thread thread4;
 	Thread thread5;
+	Thread thread6;
 	
 	void Start ()
 	{
@@ -36,16 +39,19 @@ public class UDPReceiver : MonoBehaviour
 		receivedSignal3 = "33024"; //Result - Label number
 		receivedSignal4 = "32770"; //Experiment start(32769) Default: stop(32770)
 		receivedSignal5 = "0"; 	   //Trial start(32773) stop(32774) Default: 0
+		receivedSignal6 = "0"; 	   //32779 == OVTK_StimulationId_VisualStimulationStart, 32780 == OVTK_StimulationId_VisualStimulationStop, Default:0
 		udp1 = new UdpClient (PORT_NO_1);
 		udp2 = new UdpClient (PORT_NO_2);
 		udp3 = new UdpClient (PORT_NO_3);
 		udp4 = new UdpClient (PORT_NO_4);
 		udp5 = new UdpClient (PORT_NO_5);
+		udp6 = new UdpClient (PORT_NO_6);
 		Debug.Log ("In: UDPReceiver " + PORT_NO_1 + " is set");
 		Debug.Log ("In: UDPReceiver " + PORT_NO_2 + " is set");
 		Debug.Log ("In: UDPReceiver " + PORT_NO_3 + " is set");
 		Debug.Log ("In: UDPReceiver " + PORT_NO_4 + " is set");
 		Debug.Log ("In: UDPReceiver " + PORT_NO_5 + " is set");
+		Debug.Log ("In: UDPReceiver " + PORT_NO_6 + " is set");
 
 		//If timeout should be set
 		//udp.Client.ReceiveTimeout = 10000;
@@ -54,6 +60,7 @@ public class UDPReceiver : MonoBehaviour
 		thread3 = new Thread(new ThreadStart(ThreadMethod3));
 		thread4 = new Thread(new ThreadStart(ThreadMethod4));
 		thread5 = new Thread(new ThreadStart(ThreadMethod5));
+		thread6 = new Thread(new ThreadStart(ThreadMethod6));
 		//1
 		//thread.IsBackground = true;
 		thread1.Start(); 
@@ -61,14 +68,16 @@ public class UDPReceiver : MonoBehaviour
 		thread3.Start(); 
 		thread4.Start(); 
 		thread5.Start(); 
+		thread6.Start(); 
 	}
 
-	public void PORT_SET_INIT (int received_PORT_NO_1, int received_PORT_NO_2, int received_PORT_NO_3, int received_PORT_NO_4, int received_PORT_NO_5) {
+	public void PORT_SET_INIT (int received_PORT_NO_1, int received_PORT_NO_2, int received_PORT_NO_3, int received_PORT_NO_4, int received_PORT_NO_5, int received_PORT_NO_6) {
 		PORT_NO_1 = received_PORT_NO_1;
 		PORT_NO_2 = received_PORT_NO_2;
 		PORT_NO_3 = received_PORT_NO_3;
 		PORT_NO_4 = received_PORT_NO_4;
 		PORT_NO_5 = received_PORT_NO_5;
+		PORT_NO_6 = received_PORT_NO_6;
 	}
 
 	public void PORT1_valueRESET () {
@@ -95,6 +104,10 @@ public class UDPReceiver : MonoBehaviour
 		receivedSignal5 = received_PORT_NO_5.ToString();
 	}
 
+	public void PORT6_valueSET (int received_PORT_NO_6) {
+		receivedSignal6 = received_PORT_NO_6.ToString();
+	}
+
 	public int PORT1_valueGET () {
 		return System.Int32.Parse (receivedSignal1);
 	}
@@ -115,6 +128,10 @@ public class UDPReceiver : MonoBehaviour
 		return System.Int32.Parse (receivedSignal5);
 	}
 
+	public int PORT6_valueGET () {
+		return System.Int32.Parse (receivedSignal6);
+	}
+
 	void Update ()
 	{
 	}
@@ -127,6 +144,7 @@ public class UDPReceiver : MonoBehaviour
 		thread3.Abort();
 		thread4.Abort();
 		thread5.Abort();
+		thread6.Abort();
 	}
 
 	//(memo)This method may keep opening 
@@ -177,8 +195,7 @@ public class UDPReceiver : MonoBehaviour
 			Debug.Log ("ThreadMethod4() : " + receivedSignal4 + "=> Received!");
 		}
 	} 
-
-	
+		
 	public void ThreadMethod5()
 	{
 		while(true)
@@ -188,6 +205,18 @@ public class UDPReceiver : MonoBehaviour
 			byte[] data5 = udp5.Receive(ref remoteEP5);
 			receivedSignal5 = Encoding.ASCII.GetString(data5);
 			Debug.Log ("ThreadMethod5() : " + receivedSignal5 + "=> Received!");
+		}
+	} 
+
+	public void ThreadMethod6()
+	{
+		while(true)
+		{
+			IPEndPoint remoteEP6 = null;
+			
+			byte[] data6 = udp6.Receive(ref remoteEP6);
+			receivedSignal6 = Encoding.ASCII.GetString(data6);
+			Debug.Log ("ThreadMethod6() : " + receivedSignal6 + "=> Received!");
 		}
 	} 
 }
