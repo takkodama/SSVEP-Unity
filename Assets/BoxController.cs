@@ -180,6 +180,7 @@ public class BoxController : MonoBehaviour {
 		//Yellow depict OFF (Only 180 frames)
 		if (stateMachine.getRestFlag () > 1 && stateMachine.getRestFlag () < 180) {
 			tmpInt_p2 = 0;
+
 			/*
 			text_Indicator1.color = indicatorSetter.Indicator1(0);
 			text_Indicator2.color = indicatorSetter.Indicator2(0);
@@ -190,20 +191,27 @@ public class BoxController : MonoBehaviour {
 			box_B.resetCounter ();
 			box_C.resetCounter ();
 			box_D.resetCounter ();
-			stateMachine.resetTrialFlag();
+			stateMachine.resetTrialFlag ();
 
 			textA.text = box_A.getCounter ();
 			textB.text = box_B.getCounter ();
 			textC.text = box_C.getCounter ();
 			textD.text = box_D.getCounter ();
-		}
+		} 
 
 		//Debug.Log ("========= For Debug =========");
 
 		//GET UDP signals
 		tmpInt_p1 = udprcv.PORT1_valueGET () - 33024; //Stimulus
 		tmpInt_p2 = udprcv.PORT2_valueGET () - 33024; //Target 
-		tmpInt_p3 = udprcv.PORT3_valueGET () - 33024; //Result 
+
+		if (stateMachine.getStatement () == 10) {
+			tmpInt_p3 = udprcv.PORT3_valueGET () - 33024; //Result ;
+		} else {
+			tmpInt_p3 = 0;
+			udprcv.PORT3_valueRESET ();
+		}
+
 		tmpInt_p4 = udprcv.PORT4_valueGET (); //Experiment start(32769) Default: stop(32770)  
 		tmpInt_p5 = udprcv.PORT5_valueGET (); //Trial start(32773) stop(32774)  Default:0 
 		tmpInt_p6 = udprcv.PORT6_valueGET (); //32779 == OVTK_StimulationId_VisualStimulationStart, 32780 == OVTK_StimulationId_VisualStimulationStop, Default:0
@@ -310,7 +318,8 @@ public class BoxController : MonoBehaviour {
 			stateMachine.resetTrialFlag ();
 
 		//Flash box
-		if (stateMachine.getStatement () == 12) {
+		//if (stateMachine.getStatement () == 12) {
+		if (stateMachine.getStatement () == 11) {
 			box_A.Box (stateMachine.getTrialFlag ());
 			box_B.Box (stateMachine.getTrialFlag ());
 			box_C.Box (stateMachine.getTrialFlag ());

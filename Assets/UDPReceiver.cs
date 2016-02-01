@@ -96,6 +96,11 @@ public class UDPReceiver : MonoBehaviour
 		receivedSignal3 = received_PORT_NO_3.ToString();
 	}
 
+	//Exception
+	public void PORT3_valueRESET () {
+		receivedSignal3 = "33024";
+	}
+
 	public void PORT4_valueSET (int received_PORT_NO_4) {
 		receivedSignal4 = received_PORT_NO_4.ToString();
 	}

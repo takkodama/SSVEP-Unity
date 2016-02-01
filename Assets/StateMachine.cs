@@ -67,11 +67,12 @@ public class StateMachine : MonoBehaviour {
 			if (portValue2 == 32773) { 
 				//Debug.Log ("Trial Start");
 
-				if (portValue3 == 32779) { //32779 == OVTK_StimulationId_VisualStimulationStart 
-					statement = 12;
-				} else {
+				//Flicker Stimulus Delay
+				//if (portValue3 == 32779) { //32779 == OVTK_StimulationId_VisualStimulationStart 
+				//	statement = 12;
+				//} else {
 					statement = 11;
-				}
+				//}
 				
 				TrialFlag++;
 				RestFlag = 0;
